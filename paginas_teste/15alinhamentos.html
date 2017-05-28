@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>15 Alinhamentos</title>
+    <script src="https://raw.githubusercontent.com/gustavorech/HtmlAlign/master/js/HtmlAlign.js"></script>
+
+    <style>
+        panel {
+            --size: 120;
+            margin: 10px;
+            background-color: rgba(0, 100, 0, 0.70);
+            color: white;
+        }
+
+        panel > in {
+            --align: center;
+        }
+
+        .streach-h {
+            --size: ~ 120;
+            margin: 10px 5px;
+            background-color: rgba(255, 255, 0, 0.70);
+        }
+
+            .streach-h > in {
+                --align: center left;
+                padding: 0 0 0 135px;
+                color: black;
+            }
+
+        .streach-v {
+            --size: 120 ~;
+            margin: 5px 10px;
+            background-color: rgba(0, 0, 255, 0.70);
+        }
+
+            .streach-v > in {
+                --align: center top;
+                padding: 135px 0 0 0;
+            }
+    </style>
+</head>
+<body>
+    <panel class="streach-h" style="--align: top streach"><in>Streach Top</in></panel>
+    <panel class="streach-h" style="--align: streach center"><in>Streach Center</in></panel>
+    <panel class="streach-h" style="--align: streach bottom"><in>Streach Bottom</in></panel>
+
+    <panel class="streach-v" style="--align: left streach"><in>Left Streach</in></panel>
+    <panel class="streach-v" style="--align: center streach"><in>Center Streach</in></panel>
+    <panel class="streach-v" style="--align: right streach"><in>Right Streach</in></panel>
+
+    <panel style="--align: top left"><in>Left Top</in></panel>
+    <panel style="--align: top center"><in>Center Top</in></panel>
+    <panel style="--align: top right"><in>Right Top</in></panel>
+
+    <panel style="--align: center left"><in>Left Center</in></panel>
+    <panel style="--align: center center"><in>Center Center</in></panel>
+    <panel style="--align: center right"><in>Right Center</in></panel>
+
+    <panel style="--align: bottom left"><in>Left Bottom</in></panel>
+    <panel style="--align: bottom center"><in>Center Bottom</in></panel>
+    <panel style="--align: bottom right"><in>Right Bottom</in></panel>
+</body>
+</html>
