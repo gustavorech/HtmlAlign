@@ -1,0 +1,15 @@
+﻿{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "sourceRoot": "ts",
+    "target": "es2017",
+    "module": "system",
+    "lib": [ "dom", "es2017" ],
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "outFile": "js/HtmlAlign.js",
+    "sourceMap": true
+  }
+}

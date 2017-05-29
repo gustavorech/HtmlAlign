@@ -1,0 +1,12 @@
+[
+  {
+    "outputFileName": "js/HtmlAlign.min.js",
+    "inputFiles": [
+      "js/HtmlAlign.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  }
+]
