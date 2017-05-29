@@ -84,9 +84,9 @@ namespace HtmlAlign {
     // se os valores de mínimos e máximos forem iguais indica que o componente tem
     // um tamanho fixo. Também há o valor estrela que indica tamanho proporcional
     export class SizeRange implements IValueType {
-        static Default(): SizeRange { return new SizeRange(0, 0, false, Number.POSITIVE_INFINITY, false); }
+        static Default(): SizeRange { return new SizeRange(0, 0, 0, false, Number.POSITIVE_INFINITY, false); }
 
-        constructor(public Star: number, public Min: number, public MinIsPercent: boolean, public Max: number, public MaxIsPercent: boolean) {
+        constructor(public Star: number, public Delimiter: number, public Min: number, public MinIsPercent: boolean, public Max: number, public MaxIsPercent: boolean) {
             // inverte valores caso necessário, feito apenas na criação
             if (this.MinIsPercent == this.MaxIsPercent
                 && this.Min > this.Max) {
@@ -98,9 +98,10 @@ namespace HtmlAlign {
             }
         }
 
-        public Copy(): SizeRange { return new SizeRange(this.Star, this.Min, this.MinIsPercent, this.Max, this.MaxIsPercent); }
+        public Copy(): SizeRange { return new SizeRange(this.Star, this.Delimiter, this.Min, this.MinIsPercent, this.Max, this.MaxIsPercent); }
         public CopyFrom(obj: SizeRange): void {
             this.Star = obj.Star;
+            this.Delimiter = obj.Delimiter;
             this.Min = obj.Min;
             this.MinIsPercent = obj.MinIsPercent;
             this.Max = obj.Max;

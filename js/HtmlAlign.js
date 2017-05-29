@@ -130,8 +130,9 @@ var HtmlAlign;
     // se os valores de mínimos e máximos forem iguais indica que o componente tem
     // um tamanho fixo. Também há o valor estrela que indica tamanho proporcional
     class SizeRange {
-        constructor(Star, Min, MinIsPercent, Max, MaxIsPercent) {
+        constructor(Star, Delimiter, Min, MinIsPercent, Max, MaxIsPercent) {
             this.Star = Star;
+            this.Delimiter = Delimiter;
             this.Min = Min;
             this.MinIsPercent = MinIsPercent;
             this.Max = Max;
@@ -144,10 +145,11 @@ var HtmlAlign;
                 this.Max = swap;
             }
         }
-        static Default() { return new SizeRange(0, 0, false, Number.POSITIVE_INFINITY, false); }
-        Copy() { return new SizeRange(this.Star, this.Min, this.MinIsPercent, this.Max, this.MaxIsPercent); }
+        static Default() { return new SizeRange(0, 0, 0, false, Number.POSITIVE_INFINITY, false); }
+        Copy() { return new SizeRange(this.Star, this.Delimiter, this.Min, this.MinIsPercent, this.Max, this.MaxIsPercent); }
         CopyFrom(obj) {
             this.Star = obj.Star;
+            this.Delimiter = obj.Delimiter;
             this.Min = obj.Min;
             this.MinIsPercent = obj.MinIsPercent;
             this.Max = obj.Max;
@@ -278,6 +280,16 @@ var HtmlAlign;
             if (this.Size.Star > 0) {
                 this._componentDelimiter.CopyFrom(this._givedDelimiter);
             }
+            else if (this.Size.Delimiter > 0) {
+                this._componentDelimiter.Min = this._givedDelimiter.Max * this.Size.Delimiter / 100;
+                if (this._componentDelimiter.Min < (this.Size.Min + this.Margin.Sum())) {
+                    this._componentDelimiter.Min = this.Size.Min + this.Margin.Sum();
+                }
+                else if (this._componentDelimiter.Min > (this.Size.Max + this.Margin.Sum())) {
+                    this._componentDelimiter.Min = this.Size.Max + this.Margin.Sum();
+                }
+                this._componentDelimiter.Max = this._componentDelimiter.Min;
+            }
             else {
                 if (this.Size.MinIsPercent) {
                     this._componentDelimiter.Min = this._givedDelimiter.Min * this.Size.Min / 100;
@@ -291,30 +303,36 @@ var HtmlAlign;
                 else {
                     this._componentDelimiter.Max = this.Size.Max + this.Margin.Sum();
                 }
-                // [TODO] possível heurística: se o compoente for streach com máximo infinito
-                // * ou percentual, observar os elementos irmãos para tentar diminuir a
-                // propabilidade de ocorrer uma nova mdida
+                if (!this.Size.MinIsPercent && this.Size.MaxIsPercent
+                    && this._componentDelimiter.Max < this._componentDelimiter.Min) {
+                    this._componentDelimiter.Max = this._componentDelimiter.Min;
+                }
+                if (this.Size.MinIsPercent && !this.Size.MaxIsPercent
+                    && this._componentDelimiter.Max < this._componentDelimiter.Min) {
+                    this._componentDelimiter.Min = this._componentDelimiter.Max;
+                }
             }
             // o mínimo tem maior precedência, então se por algum motivo o mínimo for
             // maior que o máximo, substitui o tamanho máximo pelo mínimo
-            if (this._componentDelimiter.Min > this._componentDelimiter.Max) {
-                this._componentDelimiter.Max = this._componentDelimiter.Min;
-            }
-            else if (this.Size.MinIsPercent && !this.Size.MaxIsPercent) {
-                this._componentDelimiter.Min = this._componentDelimiter.Max;
-            }
+            //if (this._componentDelimiter.Min > this._componentDelimiter.Max) {
+            //    this._componentDelimiter.Max = this._componentDelimiter.Min;
+            //}
+            //// caso especial, o mínimo é percentual e o máximo não é percentual
+            //else if (this.Size.MinIsPercent && !this.Size.MaxIsPercent) {
+            //    this._componentDelimiter.Min = this._componentDelimiter.Max;
+            //}
             // se o alinhamento for Streach e não há máximo, e o delimitador máximo passado
             // pelo componente pai não for infinito, e o tamanho mínimo do componente é menor
             // que o tamanho máximo passado pelo delimitador do componente pai
             // tenta reduzir a probabilidade de um novo measure tornando o delimitador
             // mínimo igual ao máximo do delimitador passado
             // faz isso somente se o componente pai é um panel
-            if (this.FatherIsPanel && this.Size.Star == 0
-                && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
-                && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == HtmlAlign.Align.Streach
-                && this._componentDelimiter.Min < this._givedDelimiter.Max) {
-                this._componentDelimiter.Min = this._givedDelimiter.Max;
-            }
+            //if (this.FatherIsPanel && this.Size.Star == 0
+            //    && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
+            //    && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == Align.Streach
+            //    && this._componentDelimiter.Min < this._givedDelimiter.Max) {
+            //    this._componentDelimiter.Min = this._givedDelimiter.Max;
+            //}
             // verifica qual a delimitação do conteúdo que é a delimitação do componente
             // menos seus espaçamentos e borda
             var totalSpacing = this.Margin.Sum() + this.Border.Sum() + this.Padding.Sum();
@@ -388,8 +406,26 @@ var HtmlAlign;
             // salva valores antigos para verificar mudança
             var lastComponentSpaceDisplacement = this._componentSpace.Displacement;
             var lastComponentSpaceSize = this._componentSpace.Size;
-            // se o componente pai for um Panel refaz as validações por mínimos e máximos percentuais
-            if (this.FatherIsPanel) {
+            // se for estrela, o valor informado substitui o desejado
+            if (this.Size.Star > 0) {
+                this._componentSpace.Size = this._givedSpace.Size;
+                if (this._componentSpace.Size != this._componentRequired) {
+                    this.IsNeedMeasureAgain = true;
+                }
+            }
+            else if (this.Size.Delimiter > 0) {
+                this._componentSpace.Size = this._givedSpace.Size * this.Size.Delimiter / 100;
+                if (this._componentSpace.Size != this._componentRequired) {
+                    this.IsNeedMeasureAgain = true;
+                    if (this._componentSpace.Size < this.Size.Min) {
+                        this._componentSpace.Size = this.Size.Min;
+                    }
+                    else if (this._componentSpace.Size > this.Size.Max) {
+                        this._componentSpace.Size = this.Size.Max;
+                    }
+                }
+            }
+            else if (this.FatherIsPanel) {
                 // garante que o tamanho máximo percentual seja respeitado
                 if (this.Size.MaxIsPercent) {
                     this.ComponentSpace.Size = this._savedComponentDesired;
@@ -413,12 +449,6 @@ var HtmlAlign;
                         this.IsNeedMeasureAgain = true;
                         this._componentSpace.Size = minSize;
                     }
-                }
-            }
-            else if (this.Size.Star > 0) {
-                this._componentSpace.Size = this._givedSpace.Size;
-                if (this._componentSpace.Size != this._componentRequired) {
-                    this.IsNeedMeasureAgain = true;
                 }
             }
             else {
@@ -809,7 +839,7 @@ var HtmlAlign;
                 return;
             }
             // processamento de adição e remoção de filhos
-            if (this._isBehavior) {
+            if (this._isBehavior || this._isRoot) {
                 // processa a remoção de elementos
                 var removedElementsLength = this._removedElements.length;
                 if (removedElementsLength > 0) {
@@ -1079,7 +1109,7 @@ var HtmlAlign;
     HtmlAlign.AlignCssProperty = AlignCssProperty;
     class SizeCssProperty {
         constructor() {
-            this.regExpSize = /^\s*(\d*[.]?\d*)([%]?)([~*]?)(\d*[.]?\d*)([%]?)(?:\s+(\d*[.]?\d*)([%]?)([~*]?)(\d*[.]?\d*)([%]?))?.*$/;
+            this.regExpSize = /^\s*(\d*[.]?\d*)([%]([\[](\d*[.]?\d*)~(\d*[.]?\d*)[\]])?)?([~*]?)(\d*[.]?\d*)([%]?)(?:\s+(\d*[.]?\d*)([%]([\[](\d*[.]?\d*)~(\d*[.]?\d*)[\]])?)?([~*]?)(\d*[.]?\d*)([%]?))?.*$/;
             this.Default = HtmlAlign.SizeRange.Default();
             this.Name = "--size";
             this.Context = HtmlAlign.CssPropertyContext.Component;
@@ -1090,30 +1120,33 @@ var HtmlAlign;
         SetValueFromCssProperty(valueString, component) {
             var matchsSize = this.regExpSize.exec(valueString);
             component.H.Size =
-                this.ReadSizeRange(matchsSize[1], matchsSize[2], matchsSize[3], matchsSize[4], matchsSize[5], this.Default);
+                this.ReadSizeRange(matchsSize[1], matchsSize[2], matchsSize[4], matchsSize[5], matchsSize[6], matchsSize[7], matchsSize[8], this.Default);
             component.V.Size =
-                this.ReadSizeRange(matchsSize[6], matchsSize[7], matchsSize[8], matchsSize[9], matchsSize[10], component.H.Size);
+                this.ReadSizeRange(matchsSize[9], matchsSize[10], matchsSize[12], matchsSize[13], matchsSize[14], matchsSize[15], matchsSize[16], component.H.Size);
         }
         GetValueStringFromComponent(component) {
             return component.H.Size.toString() + " " + component.V.Size.toString();
         }
-        ReadSizeRange(min, minPercent, type, max, maxPercent, def) {
-            var minIsPercent = minPercent == "%";
+        ReadSizeRange(min, minPercentDesc, minPercentValue, maxPercentValue, type, max, maxPercent, def) {
+            if (minPercentDesc && minPercentDesc.length > 1) {
+                return new HtmlAlign.SizeRange(0, parseFloat(min) || 100, parseFloat(minPercentValue) || 0, false, parseFloat(maxPercentValue) || Number.POSITIVE_INFINITY, false);
+            }
+            var minIsPercent = minPercentDesc == "%";
             var maxIsPercent = maxPercent == "%";
             if (!type && !min && min != "0") {
-                return new HtmlAlign.SizeRange(def.Star, def.Min, def.MinIsPercent, def.Max, def.MaxIsPercent);
+                return new HtmlAlign.SizeRange(def.Star, 0, def.Min, def.MinIsPercent, def.Max, def.MaxIsPercent);
             }
             else if (type == "~") {
-                return new HtmlAlign.SizeRange(0, parseFloat(min) || 0, minIsPercent, parseFloat(max) || Number.POSITIVE_INFINITY, maxIsPercent);
+                return new HtmlAlign.SizeRange(0, 0, parseFloat(min) || 0, minIsPercent, parseFloat(max) || Number.POSITIVE_INFINITY, maxIsPercent);
             }
             else if (type == "*") {
-                return new HtmlAlign.SizeRange(parseFloat(min) || 1, 0, false, 0, false);
+                return new HtmlAlign.SizeRange(parseFloat(min) || 1, 0, 0, false, 0, false);
             }
             else if (min == "0") {
-                return new HtmlAlign.SizeRange(0, 0, false, 0, false);
+                return new HtmlAlign.SizeRange(0, 0, 0, false, 0, false);
             }
             else {
-                return new HtmlAlign.SizeRange(0, parseFloat(min) || 0, minIsPercent, parseFloat(min) || Number.POSITIVE_INFINITY, minIsPercent);
+                return new HtmlAlign.SizeRange(0, 0, parseFloat(min) || 0, minIsPercent, parseFloat(min) || Number.POSITIVE_INFINITY, minIsPercent);
             }
         }
     }
@@ -1593,7 +1626,7 @@ var HtmlAlign;
                 if (child.H.Size.MaxIsPercent && child.V.Size.MaxIsPercent) {
                     child.Measure(fixedHDelimiter, fixedVDelimiter);
                 }
-                else if (child.H.Size.MaxIsPercent) {
+                else if (child.H.Size.MaxIsPercent || child.H.Size.Delimiter > 0) {
                     child.Measure(fixedHDelimiter, this.Component.V.ContentDelimiter);
                 }
                 else if (child.V.Size.MaxIsPercent) {

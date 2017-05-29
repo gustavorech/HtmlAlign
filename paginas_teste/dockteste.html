@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Dock</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        dock > panel {
+            background-color: rgba(0, 100, 0, 0.30);
+            margin: 1px;
+        }
+
+        .left {
+            --size: 3 ~;
+            --dock: left;
+        }
+
+        .right {
+            --size: 4 ~;
+            --dock: right;
+        }
+
+        .top {
+            --size: ~ 1;
+            --dock: top;
+        }
+
+        .bottom {
+            --size: ~ 2;
+            --dock: bottom;
+        }
+
+        .fit {
+            --dock: fit;
+            margin: 2px;
+            background-color: whitesmoke;
+            --size: ~;
+        }
+
+        panel {
+            --size: 70;
+            margin: 10px;
+            background-color: rgba(0, 100, 0, 0.70);
+            color: white;
+        }
+
+            panel > in {
+                --align: center;
+            }
+
+        .streach-h {
+            --size: ~ 70;
+            margin: 10px 5px;
+            background-color: rgba(255, 255, 0, 0.70);
+        }
+
+            .streach-h > in {
+                --align: center left;
+                padding: 0 0 0 80px;
+                color: black;
+            }
+
+        .streach-v {
+            --size: 70 ~;
+            margin: 5px 10px;
+            background-color: rgba(0, 0, 255, 0.70);
+        }
+
+            .streach-v > in {
+                --align: center top;
+                padding: 80px 0 0 0;
+            }
+    </style>
+</head>
+<body>
+    <dock>
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="top"></panel>
+        <panel class="right"></panel>
+        <panel class="bottom"></panel>
+        <panel class="left"></panel>
+
+        <panel class="fit">
+            <panel style="--size: 85%; --align: center; background-color: red; padding: 1px">
+                <grid style="--size: 100%; --grid: * *, * *">
+                    <panel style="--size: 100%; --place: 0 0; margin: 1px; background-color: white"></panel>
+                    <panel style="--size: 100%; --place: 0 1; margin: 1px; background-color: white"></panel>
+                    <panel style="--size: 100%; --place: 1 0; margin: 1px; background-color: white"></panel>
+                    <panel style="--size: 100%; --place: 1 1; margin: 1px; background-color: white"></panel>
+                </grid>
+            </panel>
+
+
+            <panel class="streach-h" style="--align: top streach"><in>Streach Top</in></panel>
+            <panel class="streach-h" style="--align: streach center"><in>Streach Center</in></panel>
+            <panel class="streach-h" style="--align: streach bottom"><in>Streach Bottom</in></panel>
+
+            <panel class="streach-v" style="--align: left streach"><in>Left Streach</in></panel>
+            <panel class="streach-v" style="--align: center streach"><in>Center Streach</in></panel>
+            <panel class="streach-v" style="--align: right streach"><in>Right Streach</in></panel>
+
+            <panel style="--align: top left"><in>Left Top</in></panel>
+            <panel style="--align: top center"><in>Center Top</in></panel>
+            <panel style="--align: top right"><in>Right Top</in></panel>
+
+            <panel style="--align: center left"><in>Left Center</in></panel>
+            <panel style="--align: center center"><in>Center Center</in></panel>
+            <panel style="--align: center right"><in>Right Center</in></panel>
+
+            <panel style="--align: bottom left"><in>Left Bottom</in></panel>
+            <panel style="--align: bottom center"><in>Center Bottom</in></panel>
+            <panel style="--align: bottom right"><in>Right Bottom</in></panel>
+        </panel>
+
+        <!--<panel style="--dock: left; --align: center; --size: 100; background-color: yellow" id="el1"></panel>
+        <panel style="--dock: left; --size: 200 ~; background-color: red"></panel>
+        <panel style="--dock: top; --size: ~ 150; background-color: blue"></panel>
+        <panel style="--dock: bottom; --size: ~ 150; background-color: yellow"></panel>
+        <panel style="--dock: right; --size: 200 ~; background-color: red"></panel>
+
+        <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+        <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+        <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+        <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+        <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+
+        <panel style="--dock: fit; --size: ~; border: 1px solid black; padding: 5px; background-color: cyan">
+
+            <dock>
+                <panel style="--dock: left; --align: center; --size: 100; background-color: yellow" id="el1"></panel>
+                <panel style="--dock: left; --size: 200 ~; background-color: red"></panel>
+                <panel style="--dock: top; --size: ~ 150; background-color: blue"></panel>
+                <panel style="--dock: bottom; --size: ~ 150; background-color: yellow"></panel>
+                <panel style="--dock: right; --size: 200 ~; background-color: red"></panel>
+
+                <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+                <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+                <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+                <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+                <panel style="--dock: right; --size: 5 ~; margin: 2px; background-color: green"></panel>
+
+                <panel style="--dock: fit; --size: ~; background-color: cyan"></panel>
+            </dock>
+        </panel>-->
+    </dock>
+</body>
+</html>

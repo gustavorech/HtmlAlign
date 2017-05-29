@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Stacks</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        .stack1 {
+            --align: top center;
+            --stack: top;
+            margin: 10px 100px 0 0;
+        }
+
+        .stack2 {
+            --align: top center;
+            --stack: bottom;
+            margin: 10px 0 0 100px;
+        }
+
+        .panel1 {
+            margin: 2px;
+            padding: 5px;
+            background-color: lightgreen;
+        }
+
+            .panel1 > in {
+                padding: 10px 15px;
+                background-color: darkblue;
+                color: white;
+            }
+
+        .stack-content-alined {
+            --align: bottom left;
+            margin: 5px;
+        }
+
+        .stack-content-alined2 {
+            --align: bottom right;
+            --stack: top;
+            margin: 5px;
+        }
+
+        .stack-no-space {
+            --align: top left;
+            --size: 200 ~;
+        }
+    </style>
+</head>
+<body>
+    <stack class="stack1">
+        <panel class="panel1"><in>1</in> </panel>
+        <panel class="panel1"><in>2</in> </panel>
+        <panel class="panel1"><in>3</in> </panel>
+        <panel class="panel1"><in>4</in> </panel>
+        <panel class="panel1"><in>5</in> </panel>
+    </stack>
+    <stack class="stack2">
+        <panel class="panel1"><in>1</in> </panel>
+        <panel class="panel1"><in>2</in> </panel>
+        <panel class="panel1"><in>3</in> </panel>
+        <panel class="panel1"><in>4</in> </panel>
+        <panel class="panel1"><in>5</in> </panel>
+    </stack>
+    <stack class="stack-content-alined">
+        <panel class="panel1" style="--size: 250"><in>1</in> </panel>
+        <panel class="panel1" style="--align: top"><in>2 - Top</in> </panel>
+        <panel class="panel1" style="--align: center"><in>3 - Center</in> </panel>
+        <panel class="panel1" style="--align: bottom"><in>4 - Bottom</in> </panel>
+        <panel class="panel1"><in>5 - Streach</in> </panel>
+    </stack>
+    <stack class="stack-content-alined2">
+        <panel class="panel1" style="--size: 170"><in>1</in> </panel>
+        <panel class="panel1" style="--align: left"><in>2 - Left</in> </panel>
+        <panel class="panel1" style="--align: center"><in>3 - Center</in> </panel>
+        <panel class="panel1" style="--align: right"><in>4 - Right</in> </panel>
+        <panel class="panel1"><in>5 - Streach</in> </panel>
+    </stack>
+    <stack class="stack-no-space">
+        <panel class="panel1"><in>1</in> </panel>
+        <panel class="panel1"><in>2</in> </panel>
+        <panel class="panel1"><in>3</in> </panel>
+        <panel class="panel1"><in>4</in> </panel>
+        <panel class="panel1"><in>5</in> </panel>
+    </stack>
+</body>
+</html>

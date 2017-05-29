@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Flow 1000 divs</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        wrap {
+            --align: center;
+            --size: 95% ~;
+            padding: 5px;
+            background-color: #52ae8f;
+        }
+
+            wrap > panel {
+                background-color: white;
+                margin: 10px;
+            }
+
+                wrap > panel > in {
+                    padding: 10px 15px;
+                    font-size: 30px;
+                }
+    </style>
+</head>
+<body>
+    <wrap id="flow"></wrap>
+    <script type="text/javascript">
+        function criarElementos() {
+            var flow = document.getElementById("flow");
+            var styleclass = "inner1";
+            for (var i = 0; i < 1000; i++) {
+
+                var panel = document.createElement("panel");
+                var inter = document.createElement("in");
+
+                inter.innerText = "[texto interno]";
+
+                panel.appendChild(inter);
+                flow.appendChild(panel);
+            }
+        };
+
+        window.addEventListener('load', function (event) {
+            criarElementos();
+        });
+    </script>
+</body>
+</html>

@@ -124,7 +124,7 @@ namespace HtmlAlign {
     }
 
     export class SizeCssProperty implements ICssProperty {
-        private regExpSize: RegExp = /^\s*(\d*[.]?\d*)([%]?)([~*]?)(\d*[.]?\d*)([%]?)(?:\s+(\d*[.]?\d*)([%]?)([~*]?)(\d*[.]?\d*)([%]?))?.*$/;
+        private regExpSize: RegExp = /^\s*(\d*[.]?\d*)([%]([\[](\d*[.]?\d*)~(\d*[.]?\d*)[\]])?)?([~*]?)(\d*[.]?\d*)([%]?)(?:\s+(\d*[.]?\d*)([%]([\[](\d*[.]?\d*)~(\d*[.]?\d*)[\]])?)?([~*]?)(\d*[.]?\d*)([%]?))?.*$/;
         private readonly Default: SizeRange = SizeRange.Default();
 
         public Name: string = "--size";
@@ -138,39 +138,44 @@ namespace HtmlAlign {
             var matchsSize: RegExpExecArray = this.regExpSize.exec(valueString);
 
             component.H.Size =
-                this.ReadSizeRange(matchsSize[1], matchsSize[2], matchsSize[3],
-                    matchsSize[4], matchsSize[5], this.Default);
+                this.ReadSizeRange(matchsSize[1], matchsSize[2], matchsSize[4],
+                    matchsSize[5], matchsSize[6], matchsSize[7], matchsSize[8], this.Default);
 
             component.V.Size =
-                this.ReadSizeRange(matchsSize[6], matchsSize[7], matchsSize[8],
-                    matchsSize[9], matchsSize[10], component.H.Size);
+                this.ReadSizeRange(matchsSize[9], matchsSize[10], matchsSize[12],
+                    matchsSize[13], matchsSize[14], matchsSize[15], matchsSize[16], component.H.Size);
         }
 
         public GetValueStringFromComponent(component: Component): string {
             return component.H.Size.toString() + " " + component.V.Size.toString();
         }
 
-        public ReadSizeRange(min: string, minPercent: string, type: string,
-            max: string, maxPercent: string, def: SizeRange): SizeRange {
+        public ReadSizeRange(min: string, minPercentDesc: string, minPercentValue: string,
+            maxPercentValue: string, type: string, max: string, maxPercent: string, def: SizeRange): SizeRange {
+            
+            if (minPercentDesc && minPercentDesc.length > 1) {
+                return new SizeRange(0, parseFloat(min) || 100, parseFloat(minPercentValue) || 0,
+                    false, parseFloat(maxPercentValue) || Number.POSITIVE_INFINITY, false);
+            }
 
-            var minIsPercent = minPercent == "%";
+            var minIsPercent = minPercentDesc == "%";
             var maxIsPercent = maxPercent == "%";
 
             if (!type && !min && min != "0") {
-                return new SizeRange(def.Star, def.Min, def.MinIsPercent, def.Max, def.MaxIsPercent);
+                return new SizeRange(def.Star, 0, def.Min, def.MinIsPercent, def.Max, def.MaxIsPercent);
             }
             else if (type == "~") {
-                return new SizeRange(0, parseFloat(min) || 0, minIsPercent,
+                return new SizeRange(0, 0, parseFloat(min) || 0, minIsPercent,
                     parseFloat(max) || Number.POSITIVE_INFINITY, maxIsPercent);
             }
             else if (type == "*") {
-                return new SizeRange(parseFloat(min) || 1, 0, false, 0, false);
+                return new SizeRange(parseFloat(min) || 1, 0, 0, false, 0, false);
             }
             else if (min == "0") {
-                return new SizeRange(0, 0, false, 0, false);
+                return new SizeRange(0, 0, 0, false, 0, false);
             }
             else {
-                return new SizeRange(0, parseFloat(min) || 0, minIsPercent,
+                return new SizeRange(0, 0, parseFloat(min) || 0, minIsPercent,
                     parseFloat(min) || Number.POSITIVE_INFINITY, minIsPercent);
             }
         }

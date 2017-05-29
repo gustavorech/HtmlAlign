@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Streach 300 divs</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        .inner1 {
+            margin: 1px;
+            background-color: rgba(0, 50, 150, 0.01);
+        }
+
+        .inner2 {
+            margin: 1px;
+            background-color: rgba(150, 50, 0, 0.01);
+        }
+
+        .inner3 {
+            margin: 1px;
+            background-color: rgba(150, 70, 255, 0.01);
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        HtmlAlign.Config.ResizeDelay = 500;
+
+        function criarElementos() {
+            var lastEl;
+            var styleclass = "inner1";
+            for (var i = 0; i < 301; i++) {
+                if (i == 100)
+                    styleclass = "inner2";
+                else if (i == 200)
+                    styleclass = "inner3";
+
+                var el = document.createElement("panel");
+                el.setAttribute("class", styleclass);
+
+                (lastEl || document.body).appendChild(el);
+                lastEl = el;
+            }
+        };
+
+        window.addEventListener('load', function (event) {
+            criarElementos();
+        });
+    </script>
+</body>
+</html>

@@ -21,7 +21,7 @@ namespace HtmlAlign {
                 if (child.H.Size.MaxIsPercent && child.V.Size.MaxIsPercent) {
                     child.Measure(fixedHDelimiter, fixedVDelimiter);
                 }
-                else if (child.H.Size.MaxIsPercent) {
+                else if (child.H.Size.MaxIsPercent || child.H.Size.Delimiter > 0) {
                     child.Measure(fixedHDelimiter, this.Component.V.ContentDelimiter);
                 }
                 else if (child.V.Size.MaxIsPercent) {

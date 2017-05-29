@@ -407,7 +407,7 @@ namespace HtmlAlign {
             }
 
             // processamento de adição e remoção de filhos
-            if (this._isBehavior) {
+            if (this._isBehavior || this._isRoot) {
                 // processa a remoção de elementos
                 var removedElementsLength = this._removedElements.length;
                 if (removedElementsLength > 0) {

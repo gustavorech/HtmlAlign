@@ -92,6 +92,18 @@ namespace HtmlAlign {
             if (this.Size.Star > 0) {
                 this._componentDelimiter.CopyFrom(this._givedDelimiter);
             }
+            else if (this.Size.Delimiter > 0) {
+                this._componentDelimiter.Min = this._givedDelimiter.Max * this.Size.Delimiter / 100;
+
+                if (this._componentDelimiter.Min < (this.Size.Min + this.Margin.Sum())) {
+                    this._componentDelimiter.Min = this.Size.Min + this.Margin.Sum();
+                }
+                else if (this._componentDelimiter.Min > (this.Size.Max + this.Margin.Sum())) {
+                    this._componentDelimiter.Min = this.Size.Max + this.Margin.Sum();
+                }
+
+                this._componentDelimiter.Max = this._componentDelimiter.Min;
+            }
             // se não ou calcula as porcentagens caso as extremidades forem porcentagens
             // ou assume exatamente o que o componente quer
             // se o componente tiver tamanho percentual mínimo pode haver necessidade de uma nova medida
@@ -112,22 +124,30 @@ namespace HtmlAlign {
                 }
                 else {
                     this._componentDelimiter.Max = this.Size.Max + this.Margin.Sum();
-                }                
+                }
 
-                // [TODO] possível heurística: se o compoente for streach com máximo infinito
-                // * ou percentual, observar os elementos irmãos para tentar diminuir a
-                // propabilidade de ocorrer uma nova mdida
+                if (!this.Size.MinIsPercent && this.Size.MaxIsPercent
+                    && this._componentDelimiter.Max < this._componentDelimiter.Min) {
+
+                    this._componentDelimiter.Max = this._componentDelimiter.Min;
+                }
+
+                if (this.Size.MinIsPercent && !this.Size.MaxIsPercent
+                    && this._componentDelimiter.Max < this._componentDelimiter.Min) {
+
+                    this._componentDelimiter.Min = this._componentDelimiter.Max;
+                }
             }
 
             // o mínimo tem maior precedência, então se por algum motivo o mínimo for
             // maior que o máximo, substitui o tamanho máximo pelo mínimo
-            if (this._componentDelimiter.Min > this._componentDelimiter.Max) {
-                this._componentDelimiter.Max = this._componentDelimiter.Min;
-            }
-            // caso especial, o mínimo é percentual e o máximo não é percentual
-            else if (this.Size.MinIsPercent && !this.Size.MaxIsPercent) {
-                this._componentDelimiter.Min = this._componentDelimiter.Max;
-            }
+            //if (this._componentDelimiter.Min > this._componentDelimiter.Max) {
+            //    this._componentDelimiter.Max = this._componentDelimiter.Min;
+            //}
+            //// caso especial, o mínimo é percentual e o máximo não é percentual
+            //else if (this.Size.MinIsPercent && !this.Size.MaxIsPercent) {
+            //    this._componentDelimiter.Min = this._componentDelimiter.Max;
+            //}
 
             // se o alinhamento for Streach e não há máximo, e o delimitador máximo passado
             // pelo componente pai não for infinito, e o tamanho mínimo do componente é menor
@@ -135,13 +155,13 @@ namespace HtmlAlign {
             // tenta reduzir a probabilidade de um novo measure tornando o delimitador
             // mínimo igual ao máximo do delimitador passado
             // faz isso somente se o componente pai é um panel
-            if (this.FatherIsPanel && this.Size.Star == 0
-                && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
-                && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == Align.Streach
-                && this._componentDelimiter.Min < this._givedDelimiter.Max) {
+            //if (this.FatherIsPanel && this.Size.Star == 0
+            //    && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
+            //    && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == Align.Streach
+            //    && this._componentDelimiter.Min < this._givedDelimiter.Max) {
 
-                this._componentDelimiter.Min = this._givedDelimiter.Max;
-            }
+            //    this._componentDelimiter.Min = this._givedDelimiter.Max;
+            //}
 
             // verifica qual a delimitação do conteúdo que é a delimitação do componente
             // menos seus espaçamentos e borda
@@ -229,8 +249,30 @@ namespace HtmlAlign {
             var lastComponentSpaceDisplacement = this._componentSpace.Displacement;
             var lastComponentSpaceSize = this._componentSpace.Size;
 
+            // se for estrela, o valor informado substitui o desejado
+            if (this.Size.Star > 0) {
+                this._componentSpace.Size = this._givedSpace.Size;
+
+                if (this._componentSpace.Size != this._componentRequired) {
+                    this.IsNeedMeasureAgain = true;
+                }
+            }
+            else if (this.Size.Delimiter > 0) {
+                this._componentSpace.Size = this._givedSpace.Size * this.Size.Delimiter / 100;
+
+                if (this._componentSpace.Size != this._componentRequired) {
+                    this.IsNeedMeasureAgain = true;
+
+                    if (this._componentSpace.Size < this.Size.Min) {
+                        this._componentSpace.Size = this.Size.Min;
+                    }
+                    else if (this._componentSpace.Size > this.Size.Max) {
+                        this._componentSpace.Size = this.Size.Max;
+                    }
+                }
+            }
             // se o componente pai for um Panel refaz as validações por mínimos e máximos percentuais
-            if (this.FatherIsPanel) {
+            else if (this.FatherIsPanel) {
                 // garante que o tamanho máximo percentual seja respeitado
                 if (this.Size.MaxIsPercent) {
                     this.ComponentSpace.Size = this._savedComponentDesired;
@@ -258,14 +300,6 @@ namespace HtmlAlign {
                         this.IsNeedMeasureAgain = true;
                         this._componentSpace.Size = minSize;
                     }
-                }
-            }
-            // se for estrela, o valor informado substitui o desejado
-            else if (this.Size.Star > 0) {
-                this._componentSpace.Size = this._givedSpace.Size;
-
-                if (this._componentSpace.Size != this._componentRequired) {
-                    this.IsNeedMeasureAgain = true;
                 }
             }
             // caso contrário o valor desejado é respeitado

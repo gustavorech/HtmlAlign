@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Teste Grid</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        grid {
+            --align: center;
+            --size: 99%;
+            --grid: 20% 45% 35%, 15% 55% 30%;
+        }
+
+        panel {
+            --align: center;
+            --size: 100%;
+            margin: 1px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <grid>
+        <panel style="--place: 0 0"></panel>
+        <panel style="--place: 0 1"></panel>
+        <panel style="--place: 0 2"></panel>
+        <panel style="--place: 1 0"></panel>
+        <panel style="--place: 1 1"></panel>
+        <panel style="--place: 1 2"></panel>
+        <panel style="--place: 2 0"></panel>
+        <panel style="--place: 2 1"></panel>
+        <panel style="--place: 2 2"></panel>
+    </grid>
+</body>
+</html>

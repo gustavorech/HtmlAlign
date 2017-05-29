@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Flow Stress Very Hard</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        wrap {
+            --align: center;
+            --size: 100% ~;
+            padding: 5px;
+            background-color: #52ae8f;
+            --flow: left;
+        }
+
+        /*flow:hover {
+            background-color: #52a8ae;
+            --flow: right;
+        }*/
+
+            wrap > in {
+                background-color: white;
+                --size: 1;
+                margin: 5px;
+            }
+
+                /*flow > in:hover {
+                    background-color: rgba(255, 255, 255, 0.90);
+                    margin: 0;
+                }*/
+
+    </style>
+</head>
+<body>
+        <wrap id="flow" hover></wrap>
+    <script type="text/javascript">
+        var flow;
+        var count = 0;
+        function criarElementos() {
+
+            var panel = document.createElement("in");
+            panel.innerText = ++count;
+            panel.setAttribute("style", "--size: " + (count) + ";");
+            panel.setAttribute("hover", "");
+            panel.addEventListener("click", function () {            
+                panel.component.Width = {
+                    width: panel.component.Width.width * 2 * Math.random()
+                };
+
+                panel.component.Height = {
+                    height: panel.component.Width.width * 2 * Math.random()
+                };
+            });
+            flow.appendChild(panel);
+
+            //for (var index = 0; index < flow.component.Children.length; index++) {
+            //    var child = flow.component.Children[index];
+            //    child.Width = { width: child.Width.width + 1 };
+            //    child.Height = { height: child.Height.height + 1 };
+            //}
+
+
+            if (flow.firstChild == undefined) flow.appendChild(panel);
+            else flow.insertBefore(panel, flow.firstChild);
+
+            setTimeout(criarElementos, 4);
+        };
+
+        window.addEventListener('load', function (event) {
+            flow = document.getElementById("flow");
+            criarElementos();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Teste Stack Star</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        stack {
+            --size: 50%;
+            --align: center;
+        }
+
+        panel {
+            --size: *;
+            --align: top left;
+            margin:5px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <stack>
+        <panel></panel>
+        <panel></panel>
+        <panel></panel>
+    </stack>
+</body>
+</html>

@@ -1,0 +1,18 @@
+
+dock {
+    --size: 100%[520~] ~;
+}
+
+.menu {
+    --size: 220 ~;
+    --dock: left;
+}
+
+.main {
+    --dock: fit;
+}
+
+    .main > panel {
+        --size: 100%[~880] ~;
+        --align: center top;
+    }
