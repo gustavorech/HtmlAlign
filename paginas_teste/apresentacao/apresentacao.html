@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="text/html; charset=UTF-8">
-    <meta charset="iso-UTF-8" />
     <title>HtmlAlign</title>
     <script type="text/javascript" src="../../js/HtmlAlign.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
@@ -352,9 +351,33 @@
                     </stack>
                     <panel class="container-footer">
                         <panel class="img"></panel>
-                        <panel class="final">
-                            <in class="title">Este poster foi construído utilizando HTML, CSS e a implementação desse trabalho.</in>
-                        </panel>
+                        <stack class="final">
+                            <in class="title">Este poster foi construído utilizando HTML, CSS e a implementação deste trabalho.</in>
+                            <panel>
+                                <stack class="qrcode-detalhes">
+                                    <in>
+                                        Para acessar a versão em HTML utilize o QR-Code ao lado. É necessário utilizar um browser compatível com <b>custom properties</b>
+                                        e <b>max-content</b>. Os browsers <b class="ok">Chrome</b>, <b class="ok">Firefox</b>, <b class="ok">Opera</b> e <b class="ok">Safari</b>
+                                        com versões mais novas já possuem essas features implementadas.
+                                    </in>
+                                    <in>
+                                        Infelizmente o <b class="nok">Internet Explores</b> não é compatível em todas as suas versões. O <b class="nok">Microsoft Edge</b> ainda
+                                        não é compatível, mas, segundo o site de acompanhamento de implementação do Edge, já está em processo de
+                                        implementação.
+                                    </in>
+                                    <stack class="tecnologias">
+                                        <panel class="img-css"></panel>
+                                        <panel class="img-es7"></panel>
+                                        <panel class="img-ts"></panel>
+                                        <panel class="img-vs"></panel>
+                                    </stack>
+                                </stack>
+                                <stack class="qrcode-container">
+                                    <in>http://tiny.cc/64imly</in>
+                                    <panel class="img"></panel>
+                                </stack>
+                            </panel>
+                        </stack>
                     </panel>
                 </stack>
             </stack>

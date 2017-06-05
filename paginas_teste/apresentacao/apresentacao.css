@@ -70,7 +70,7 @@ panel, in, stack, fit {
             .head-container > .center > in:nth-child(1) {
                 font-weight: 500;
                 font-size: 100px;
-                color: #313358;
+                color: #b00d19;
             }
 
             .head-container > .center > in:nth-child(2) {
@@ -526,9 +526,10 @@ panel, in, stack, fit {
     }
 
     .container-footer > .final {
+        --stack: top;
         --align: top right;
         --size: 60% 100%;
-        margin-left: 40px;
+        margin-left: 80px;
     }
 
         .container-footer > .final > .title {
@@ -537,3 +538,80 @@ panel, in, stack, fit {
             font-weight: 500;
             color: #313358;
         }
+
+.container-footer > .final > panel {
+    --size: 100%;
+}
+
+.qrcode-detalhes {
+    --stack: top;
+    --size: 75% 100%;
+}
+
+    .qrcode-detalhes > in {
+        font-size: 40px;
+        margin-top: 40px;
+        text-align: center;
+    }
+
+.qrcode-container {
+    --stack: top;
+    --align: right;
+    --size: 25% 100%;
+}
+
+    .qrcode-container > in {
+        --align: top center;
+        font-size: 40px;
+        padding: 20px 0 0 0;
+    }
+
+    .qrcode-container > .img {
+        --align: top center;
+        --size: 100% *;
+        background: url(img/qr_code.jpg) center top no-repeat;
+    }
+
+.ok {
+    color: #6b6d91;
+}
+
+.nok {
+    color: #d7868c;
+}
+
+.tecnologias {
+    --align: center;
+    margin-top: 60px;
+}
+
+    .tecnologias > .img-css {
+        --align: top left;
+        --size: 120;
+        background: url(img/HTML5_CSS_JavaScript.png) center no-repeat;
+        background-size: 100%;
+    }
+
+    .tecnologias > .img-es7 {
+        --align: top left;
+        --size: 120;
+        margin-left: 80px;
+        background: url(img/es7Logo.png) center no-repeat;
+        background-size: contain;
+    }
+
+    .tecnologias > .img-ts {
+        --align: top left;
+        --size: 120;
+        margin-left: 80px;
+        background: url(img/ts.png) center no-repeat;
+        background-size: contain;
+    }
+
+    .tecnologias > .img-vs {
+        --align: top left;
+        --size: 120;
+        margin-left: 80px;
+        background: url(img/vs.png) center no-repeat;
+        background-size: contain;
+    }
