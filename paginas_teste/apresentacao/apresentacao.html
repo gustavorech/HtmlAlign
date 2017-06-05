@@ -1,21 +1,361 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta charset="iso-8859-1" />
     <title>HtmlAlign</title>
     <script type="text/javascript" src="../../js/HtmlAlign.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="apresentacao.css" rel="stylesheet" />
 </head>
 <body>
-    <dock>
-        <panel class="menu">
+    <panel class="encapsulate">
+        <panel class="encapsulate-container">
+            <stack class="banner-wrapper">
+                <panel class="head-container">
+                    <panel class="img-left"></panel>
+                    <panel class="img-right"></panel>
+                    <stack class="center">
+                        <in>ALTERNATIVA DE LAYOUT PARA HTML COM BASE NO SISTEMA DE LAYOUT DINÂMICO DO WPF</in>
+                        <in>Gustavo Rech</in>
+                        <in>Orientador: Prof. João Batista S. de Oliveira</in>
+                        <in>Ciência da Computação</in>
+                        <in>gustavo.rech@acad.pucrs.br</in>
+                    </stack>
+                </panel>
+                <stack class="body-container">
+                    <in class="chamada" style="border: 0 solid #d7868c; border-width: 0 20px">
+                        <b>HTML</b> e <b>CSS</b>, as duas linguagens para descrever interfaces Web, são linguagens
+                        versateis e poderosas mas não é incomum nos depararmos com grandes dificuldades
+                        para atingirmos os resultados que almejamos. Como consequência disso o tempo de
+                        desenvolvimento pode ser aumentado e, muitas vezes, não conseguimos reproduzir da
+                        forma inicialmente projetada. Existe alguma forma de mitigar isso?
+                    </in>
+                    <panel class="texto-projeto">
+                        <stack class="left">
+                            <stack class="container-texto">
+                                <in class="title">Motivação</in>
+                                <in class="texto">
+                                    Os navegadores foram projetados para disponibilizar documentos de forma digital e,
+                                    nos primórdios, para disponibilizar artigos científicos entre universidades. O layout
+                                    foi projetado para documentos, como é a ferramenta Word da Microsoft, mas logo a ideia
+                                    de navegadores de internet expandiu, novos usuários começaram a utilizar, e as páginas
+                                    passaram a disponibilizar documentos não mais restritos a artigos científicos. O layout
+                                    precisava ser atualizado para comportar os novos conteúdos, e ele foi, mas em cima do que já existia.
+                                </in>
+                                <in class="texto">
+                                    Hoje, um termo muito pesquisado em ferramentas de busca na internet é "CSS tricks",
+                                    truques para a utilização do CSS, e esse termo demonstra o que designers e
+                                    desenvolvedores Web precisam, muitas vezes, para criar o layout de uma página, uma
+                                    vez que para atingir um determinado layout nem sempre há algo declarativo e simples no CSS.
+                                </in>
+                            </stack>
+                        </stack>
+                        <stack class="right">
+                            <stack class="container-texto">
+                                <in class="title">Objetivo</in>
+                                <in class="texto">
+                                    Este trabalho tem por objetivo disponibilizar, para pessoas que não se adaptam bem com o
+                                    layout disponível no CSS, uma nova opção de declaração de layout, com a qual possam
+                                    se sentir mais confortáveis e reduzir a quantidade de declarações necessárias para
+                                    chegar no resultado esperado. Será definido e apresentado um <b>superset</b> de
+                                    declarações sobre o HTML e CSS a fim de atingir uma solução de layout em que os
+                                    elementos possuam um posicionamento baseado no auto <b>dimensionamento</b> e <b>alinhamento</b>
+                                    de elementos, e que o <b>comportamento</b> dos elementos dependa majoritariamente do elemento
+                                    pai.
+                                </in>
+                                <in class="texto">
+                                    As declarações de layout especificadas e o comportamento resultante serão semelhantes
+                                    às de aplicações tradicionais pensadas em janela e painéis, e terão por base o sistema
+                                    de layout dinâmico implementado pelo <b>WPF</b>. A solução de layout deverá funcionar em conjunto
+                                    com toda a estrutura já existente do HTML e do CSS, com isso todo o poder de processamento
+                                    gráfico já implementado e otimizado nos navegadores junto a declaração, interpretação
+                                    e processamento do HTML e CSS serão aproveitados.
+                                </in>
+                            </stack>
+                        </stack>
+                    </panel>
+                    <in class="chamada" style="border: 0 solid #d7868c; border-width: 0 20px">
+                        <div class="title">HtmlAlign</div>
+                        <div style="font-weight: 500">
+                            É um renderizador geométrico dinâmico feito em javascript que atua sobre o renderizador do HTML e, a partir
+                            de um conjunto de declarações feitas sobre o HTML e o CSS, realiza o cálculo de layout, posiciona os
+                            elementos na tela e detecta alterações de forma dinâmica.
+                        </div>
+                    </in>
+                    <stack class="features">
+                        <stack>
+                            <panel class="title">
+                                <in class="title">Auto Dimensionamento</in>
+                            </panel>
+                            <in class="content">
+                                Todo elemento pode ampliar o seu tamanho para comportar a necessidade dos elementos internos.
+                            </in>
+                        </stack>
+                        <panel class="split"></panel>
+                        <stack>
+                            <panel class="title">
+                                <in class="title">Alinhamento Total</in>
+                            </panel>
+                            <in class="content">
+                                Todo elemento tem a liberdade de se posicionar como quiser no espaço entregue pelo elemento pai.
+                            </in>
+                        </stack>
+                        <panel class="split"></panel>
+                        <stack>
+                            <panel class="title">
+                                <in class="title">Comportamento no Elemento Pai</in>
+                            </panel>
+                            <in class="content">
+                                O elemento pai tem controle sobre os elementos filhos entregando espaços diferentes para cada um.
+                            </in>
+                        </stack>
+                        <panel class="split"></panel>
+                        <stack>
+                            <panel class="title">
+                                <in class="title">Extensível</in>
+                            </panel>
+                            <in class="content">
+                                Novos comportamentos e declarações podem ser adicionados.
+                            </in>
+                        </stack>
+                    </stack>
+                    <stack class="container-base">
+                        <in class="title">Comportamento Base:</in>
+                        <stack>
+                            <stack>
+                                <in class="subtitle">Modelo de Caixa:</in>
+                                <panel class="modelo-caixa">
+                                    <in>margin</in>
+                                    <panel>
+                                        <in>padding</in>
+                                        <panel>
+                                            <in>content space</in>
+                                        </panel>
+                                    </panel>
+                                </panel>
+                            </stack>
+                            <stack>
+                                <in class="subtitle">Alinhamento:</in>
+                                <grid class="grid-alinhamentos">
+                                    <panel style="--place: 1 0;"><in>left</in></panel>
+                                    <panel style="--place: 2 0;"><in>center</in></panel>
+                                    <panel style="--place: 3 0;"><in>right</in></panel>
+                                    <panel style="--place: 4 0;"><in>streach</in></panel>
 
+                                    <panel style="--place: 0 1;"><in>top</in></panel>
+                                    <panel style="--place: 0 2;"><in>center</in></panel>
+                                    <panel style="--place: 0 3;"><in>bottom</in></panel>
+                                    <panel style="--place: 0 4;"><in>streach</in></panel>
+
+                                    <panel style="--place: 1 1;"><panel style="--align: left top"></panel></panel>
+                                    <panel style="--place: 1 2;"><panel style="--align: left center"></panel></panel>
+                                    <panel style="--place: 1 3;"><panel style="--align: left bottom"></panel></panel>
+                                    <panel style="--place: 1 4;"><panel style="--align: left streach" class="vs"></panel></panel>
+
+                                    <panel style="--place: 2 1;"><panel style="--align: center top"></panel></panel>
+                                    <panel style="--place: 2 2;"><panel style="--align: center center"></panel></panel>
+                                    <panel style="--place: 2 3;"><panel style="--align: center bottom"></panel></panel>
+                                    <panel style="--place: 2 4;"><panel style="--align: center streach" class="vs"></panel></panel>
+
+                                    <panel style="--place: 3 1;"><panel style="--align: right top"></panel></panel>
+                                    <panel style="--place: 3 2;"><panel style="--align: right center"></panel></panel>
+                                    <panel style="--place: 3 3;"><panel style="--align: right bottom"></panel></panel>
+                                    <panel style="--place: 3 4;"><panel style="--align: right streach" class="vs"></panel></panel>
+
+                                    <panel style="--place: 4 1;"><panel style="--align: streach top" class="hs"></panel></panel>
+                                    <panel style="--place: 4 2;"><panel style="--align: streach center" class="hs"></panel></panel>
+                                    <panel style="--place: 4 3;"><panel style="--align: streach bottom" class="hs"></panel></panel>
+                                    <panel style="--place: 4 4;"><panel style="--align: streach streach; --size: ~"></panel></panel>
+                                </grid>
+                            </stack>
+                            <stack>
+                                <in class="subtitle">Dilimitação de Tamanho:</in>
+                                <in class="subtitle" style="font-size: 40px; margin-top: -10px; margin-bottom: 10px">(por dimensão)</in>
+                                <stack class="delimitacoes">
+                                    <stack>
+                                        <in>Absoluto:</in>
+                                        <stack>
+                                            <in>~</in>
+                                            <in>200</in>
+                                            <in>~400</in>
+                                            <in>200~</in>
+                                            <in>200~400</in>
+                                        </stack>
+                                    </stack>
+                                    <stack>
+                                        <in>Percentual:</in>
+                                        <stack>
+                                            <in>50%</in>
+                                            <in>~50%</in>
+                                            <in>50%~</in>
+                                            <in>200~50%</in>
+                                            <in>50%~400</in>
+                                        </stack>
+                                    </stack>
+                                    <stack>
+                                        <in>Percentual Delimitado:</in>
+                                        <stack>
+                                            <in>50%[~400]</in>
+                                            <in>50%[200~]</in>
+                                            <in>50%[200~400]</in>
+                                        </stack>
+                                    </stack>
+                                    <stack>
+                                        <in>Proporcional:</in>
+                                        <stack>
+                                            <in>*</in>
+                                            <in>2*</in>
+                                            <in>4*</in>
+                                        </stack>
+                                    </stack>
+                                </stack>
+                            </stack>
+                            <stack>
+                                <in class="subtitle">Declaração:</in>
+                                <stack class="exemplo-declaracao">
+                                    <in><span class="class">.wrapper</span> {</in>
+                                    <in class="recuo">
+                                        <span class="property">--behavior</span>:
+                                        <span class="value"> stack</span>;
+                                    </in>
+                                    <in class="recuo">
+                                        <span class="property">--stack</span>:
+                                        <span class="value"> top</span>;
+                                    </in>
+                                    <in class="recuo">
+                                        <span class="property">--align</span>:
+                                        <span class="value"> top center</span>;
+                                    </in>
+                                    <in class="recuo">
+                                        <span class="property">--size</span>:
+                                        <span class="value"> 100%[600~1200] ~</span>;
+                                    </in>
+                                    <in class="recuo">
+                                        <span class="property">padding</span>:
+                                        <span class="value"> 20px</span>;
+                                    </in>
+                                    <in>}</in>
+                                </stack>
+                            </stack>
+                        </stack>
+                    </stack>
+
+                    <stack class="container-comportamentos">
+                        <in class="title">Principais Comportamentos:</in>
+                        <stack>
+                            <stack>
+                                <in class="subtitle">Panel:</in>
+                                <panel class="panel-exemplo">
+                                    <panel></panel>
+                                    <panel></panel>
+                                    <panel></panel>
+                                    <panel>
+                                        <panel></panel>
+                                        <panel></panel>
+                                        <panel></panel>
+                                    </panel>
+                                </panel>
+                            </stack>
+                            <stack>
+                                <in class="subtitle">Stack:</in>
+                                <panel class="stack-exemplo">
+                                    <stack>
+                                        <panel><in>1</in></panel>
+                                        <panel><in>2</in></panel>
+                                        <panel><in>3</in></panel>
+                                        <panel><in>4</in></panel>
+                                    </stack>
+                                    <stack>
+                                        <panel><in>1</in></panel>
+                                        <panel><in>2</in></panel>
+                                        <panel><in>3</in></panel>
+                                        <panel><in>4</in></panel>
+                                    </stack>
+                                    <stack>
+                                        <panel><in>1</in></panel>
+                                        <panel><in>2</in></panel>
+                                        <panel><in>3</in></panel>
+                                        <panel><in>4</in></panel>
+                                    </stack>
+                                    <stack>
+                                        <panel><in>1</in></panel>
+                                        <panel><in>2</in></panel>
+                                        <panel><in>3</in></panel>
+                                        <panel><in>4</in></panel>
+                                    </stack>
+                                </panel>
+                            </stack>
+                            <stack>
+                                <in class="subtitle">Wrap:</in>
+                                <wrap class="wrap-exemplo">
+                                    <panel><in>1</in></panel>
+                                    <panel><in>2</in></panel>
+                                    <panel><in>3</in></panel>
+                                    <panel><in>4</in></panel>
+                                    <panel><in>5</in></panel>
+                                    <panel><in>6</in></panel>
+                                    <panel><in>7</in></panel>
+                                    <panel><in>8</in></panel>
+                                    <panel><in>9</in></panel>
+                                    <panel><in>10</in></panel>
+                                    <panel><in>11</in></panel>
+                                    <panel><in>12</in></panel>
+                                    <panel><in>13</in></panel>
+                                    <panel><in>14</in></panel>
+                                </wrap>
+                            </stack>
+                            <stack>
+                                <in class="subtitle">Dock:</in>
+                                <dock class="dock-exemplo">
+                                    <panel class="left"></panel>
+                                    <panel class="top"></panel>
+                                    <panel class="right"></panel>
+                                    <panel class="bottom"></panel>
+
+                                    <panel class="left"></panel>
+                                    <panel class="top"></panel>
+                                    <panel class="right"></panel>
+                                    <panel class="bottom"></panel>
+
+                                    <panel class="left"></panel>
+                                    <panel class="top"></panel>
+                                    <panel class="right"></panel>
+                                    <panel class="bottom"></panel>
+
+                                    <panel class="left"></panel>
+                                    <panel class="top"></panel>
+                                    <panel class="right"></panel>
+                                    <panel class="bottom"></panel>
+
+                                    <panel class="left"></panel>
+                                    <panel class="top"></panel>
+                                    <panel class="right"></panel>
+                                    <panel class="bottom"></panel>
+                                </dock>
+                            </stack>
+                            <stack>
+                                <in class="subtitle">Grid:</in>
+                                <grid class="grid-exemplo">
+                                    <panel style="--place: 0 0"></panel>
+                                    <panel style="--place: 0 1"></panel>
+                                    <panel style="--place: 0 2"></panel>
+                                    <panel style="--place: 1 0"></panel>
+                                    <panel style="--place: 1 1"></panel>
+                                    <panel style="--place: 1 2"></panel>
+                                    <panel style="--place: 2 0"></panel>
+                                    <panel style="--place: 2 1"></panel>
+                                    <panel style="--place: 2 2"></panel>
+                                </grid>
+                            </stack>
+                        </stack>
+                    </stack>
+                    <panel class="container-footer">
+                        <panel class="img"></panel>
+                    </panel>
+                </stack>
+            </stack>
         </panel>
-        <panel class="main">
-            <panel>
-                <in>Oi</in>
-            </panel>
-        </panel>
-    </dock>
+    </panel>
 </body>
 </html>

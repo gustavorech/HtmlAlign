@@ -62,13 +62,15 @@ namespace HtmlAlign {
         public Fit: Fit;
 
         public Measure(): void {
-            var transformValue = this.Component.Element.style.transform;
-            this.Component.Element.style.transform = "initial";
+            var value = this.Component.Element.style.getPropertyValue("transform");
+            this.OnDispose();
+
+            super.Measure();
+
+            this.Component.Element.style.setProperty("transform", value);
 
             // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
             this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");
-
-            super.Measure();
         }
 
         public Arrange(): void {
@@ -93,13 +95,36 @@ namespace HtmlAlign {
             this.Component.Element.style.height = height + "px";
             this.Component.Element.style.top = this.Component.V.ComponentSpace.Displacement + "px";
 
-            //var translate = " translate(" + this.Component.H.ComponentSpace.Displacement + "px, " + this.Component.V.ComponentSpace.Displacement + "px)";
-
             var uniformWidth = this.Component.Father.H.ContentSpace.Size
                 / this.Component.H.ComponentDesired;
 
             var uniformHeight = this.Component.Father.V.ContentSpace.Size
                 / this.Component.V.ComponentDesired;
+
+            var transformOriginH = 0;
+            var transformOriginV = 0;
+
+            if (this.Component.H.Align == Align.Center) {
+                transformOriginH = this.Component.H.ComponentRequired / 2;
+            }
+            else if (this.Component.H.Align == Align.End) {
+                transformOriginH = this.Component.H.ComponentRequired;
+            }
+            else if (this.Component.H.Align == Align.Streach) {
+                uniformWidth = 1;
+            }
+
+            if (this.Component.V.Align == Align.Center) {
+                transformOriginV = this.Component.V.ComponentRequired / 2;
+            }
+            else if (this.Component.V.Align == Align.End) {
+                transformOriginV = this.Component.V.ComponentRequired;
+            }
+            else if (this.Component.V.Align == Align.Streach) {
+                uniformHeight = 1;
+            }
+
+            this.Component.Element.style.transformOrigin = transformOriginH + "px " + transformOriginV + "px";
 
             if (this.Fit == Fit.Uniform) {
                 this.Component.Element.style.transform = "scale(" + Math.min(uniformWidth, uniformHeight) + ")";
@@ -114,6 +139,13 @@ namespace HtmlAlign {
             else if (this.Fit == Fit.Vertical) {
                 this.Component.Element.style.transform = "scale(1," + uniformHeight + ")";
             }
+
+            // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
+            this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");
+        }
+
+        public OnDispose(): void {
+            this.Component.Element.style.removeProperty("transform");
 
             // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
             this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");

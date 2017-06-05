@@ -8,8 +8,8 @@ namespace HtmlAlign {
         public Component: Component;
         public IsLayoutOverridedInArrange = true;
         
-        private _widthIsMaxContent = true;
-        private _heightIsMaxContent = true;
+        private _widthIsMaxContent = false;
+        private _heightIsMaxContent = false;
         private _needInformLastStyle = false;
 
         public GetNew() {
@@ -75,18 +75,26 @@ namespace HtmlAlign {
         }
 
         public Arrange(): void {
-            if (!this._widthIsMaxContent || this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
-                this._widthIsMaxContent = false;
-                var width = this.Component.H.ComponentSpace.Size;
+            if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
 
-                if (width < 0) {
-                    width = 0;
+                this.Component.H.GivedDelimiter = new SizeDelimiter(this.Component.H.GivedSpace.Size, this.Component.H.GivedSpace.Size);
+                this.Component.V.GivedDelimiter = new SizeDelimiter(this.Component.V.GivedSpace.Size, this.Component.V.GivedSpace.Size);
+
+                this.Measure();
+
+                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+                    this._widthIsMaxContent = false;
+                    var width = this.Component.H.ComponentSpace.Size;
+
+                    if (width < 0) {
+                        width = 0;
+                    }
+
+                    this.Component.Element.style.width = width + "px";
                 }
-
-                this.Component.Element.style.width = width + "px";
             }
 
-            if (!this._heightIsMaxContent || this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
+            if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
                 this._heightIsMaxContent = false;
                 var height = this.Component.V.ComponentSpace.Size;
 
@@ -96,6 +104,28 @@ namespace HtmlAlign {
 
                 this.Component.Element.style.height = height + "px";
             }
+
+            //if (!this._widthIsMaxContent || this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+            //    this._widthIsMaxContent = false;
+            //    var width = this.Component.H.ComponentSpace.Size;
+
+            //    if (width < 0) {
+            //        width = 0;
+            //    }
+
+            //    this.Component.Element.style.width = width + "px";
+            //}
+
+            //if (!this._heightIsMaxContent || this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
+            //    this._heightIsMaxContent = false;
+            //    var height = this.Component.V.ComponentSpace.Size;
+
+            //    if (height < 0) {
+            //        height = 0;
+            //    }
+
+            //    this.Component.Element.style.height = height + "px";
+            //}
             
             this.Component.Element.style.left = this.Component.H.ComponentSpace.Displacement + "px";
             this.Component.Element.style.top = this.Component.V.ComponentSpace.Displacement + "px";

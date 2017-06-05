@@ -95,10 +95,10 @@ namespace HtmlAlign {
             else if (this.Size.Delimiter > 0) {
                 this._componentDelimiter.Min = this._givedDelimiter.Max * this.Size.Delimiter / 100;
 
-                if (this._componentDelimiter.Min < (this.Size.Min + this.Margin.Sum())) {
+                if (this._componentDelimiter.Min < this.Size.Min) {
                     this._componentDelimiter.Min = this.Size.Min + this.Margin.Sum();
                 }
-                else if (this._componentDelimiter.Min > (this.Size.Max + this.Margin.Sum())) {
+                else if (this._componentDelimiter.Min > this.Size.Max) {
                     this._componentDelimiter.Min = this.Size.Max + this.Margin.Sum();
                 }
 

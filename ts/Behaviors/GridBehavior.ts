@@ -48,7 +48,7 @@ namespace HtmlAlign {
                     var value = parseInt(matchs[7]);
                     var isPercent = matchs[8] == "%";
 
-                    sizeRange = new SizeRange(0, value, isPercent, value, isPercent);
+                    sizeRange = new SizeRange(0, 0, value, isPercent, value, isPercent);
 
                 }
                 // se for estrela ou tiver um espaço de valores
@@ -64,17 +64,17 @@ namespace HtmlAlign {
                         sizeRange = SizeRange.Default();
                     }
                     else if (type == "~") {
-                        sizeRange = new SizeRange(0, parseFloat(min) || 0, minIsPercent,
+                        sizeRange = new SizeRange(0, 0, parseFloat(min) || 0, minIsPercent,
                             parseFloat(max) || Number.POSITIVE_INFINITY, maxIsPercent);
                     }
                     else if (type == "*") {
-                        sizeRange = new SizeRange(parseFloat(min) || 1, 0, false, 0, false);
+                        sizeRange = new SizeRange(parseFloat(min) || 1, 0, 0, false, 0, false);
                     }
                     else if (min == "0") {
-                        sizeRange = new SizeRange(0, 0, false, 0, false);
+                        sizeRange = new SizeRange(0, 0, 0, false, 0, false);
                     }
                     else {
-                        sizeRange = new SizeRange(0, parseFloat(min) || 0, minIsPercent,
+                        sizeRange = new SizeRange(0, 0, parseFloat(min) || 0, minIsPercent,
                             parseFloat(min) || Number.POSITIVE_INFINITY, minIsPercent);
                     }
                 }

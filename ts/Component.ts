@@ -28,11 +28,25 @@ namespace HtmlAlign {
             return this._behavior;
         }
         public set Behavior(value: IBehavior) {
-            if (this._behavior != undefined && this._behavior.Name != value.Name) {
+            // [TODO] modificar isso no futuro
+            if (!value) {
+                if (!this._behavior) {
+                    value = new PanelBehavior();
+                }
+                else {
+                    return;
+                }
+            }
+
+            if (this._behavior && this._behavior.Name != value.Name) {
+                if (this._behavior.OnDispose) {
+                    this._behavior.OnDispose();
+                }
+
                 this._isBehaviorChanged = true;
             }
 
-            if (this._behavior == undefined || this._isBehaviorChanged) {
+            if (!this._behavior || this._isBehaviorChanged) {
                 this._behavior = value;
 
                 this._isLogical = false;
@@ -57,6 +71,9 @@ namespace HtmlAlign {
             this.H.FatherIsPanel = this.V.FatherIsPanel
                 = this.Father.Behavior.Name == "panel" || this.Father.Behavior.Name == "fit";
         }
+
+        public CascadeUpdateLength: number;
+        public UpdateOnHover: boolean;
         
         public get Visible(): boolean {
             return this.H.Visible;
@@ -138,9 +155,18 @@ namespace HtmlAlign {
                 this.Element["component"] = this;
 
                 // informa que o elemento mudará o css quando o mouse estiver sobre ele
+                // [TODO] deverá ser modificado no futuro
                 if (this.Element.attributes["hover"] != null) {
                     this.Element.addEventListener("mouseover", () => this.NotifyTagChanged());
                     this.Element.addEventListener("mouseout", () => this.NotifyTagChanged());
+                }
+
+                // [TODO] deverá ser modificado no futuro
+                if (this.Element.style.getPropertyValue("transform")) {
+                    this.Element.style.removeProperty("transform");
+
+                    // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
+                    this.Element["laststyle"] = this.Element.getAttribute("style");
                 }
 
                 // realiza a primeira leitura das propriedades css
@@ -162,6 +188,10 @@ namespace HtmlAlign {
                         element = <HTMLElement>element.nextElementSibling;
                     }
                 }
+            }
+
+            if (this._behavior.OnInit) {
+                this._behavior.OnInit();
             }
         }
         
@@ -367,6 +397,18 @@ namespace HtmlAlign {
             }
         }
 
+        private PropagateRemovedComponent(component: Component) {
+            if (component._behavior.OnDispose) {
+                component._behavior.OnDispose();
+            }
+
+            component.Element["component"] = undefined;
+
+            for (var index = 0; index < component.Children.length; index++) {
+                this.PropagateRemovedComponent(component.Children[index]);
+            }
+        }
+
         public _canInformNeedArrangeInMeasure = true;
         public Measure(h: SizeDelimiter, v: SizeDelimiter) {
             // componentes congelados não sofrem alterações
@@ -386,6 +428,10 @@ namespace HtmlAlign {
                     this._isBehaviorChanged = false;
 
                     Layout.RefreshValuesFromCssProperties(this);
+
+                    if (this._behavior.OnInit) {
+                        this._behavior.OnInit();
+                    }
 
                     for (var index = 0; index < this.Children.length; index++) {
                         this.Children[index].NotifyTagChanged();
@@ -424,7 +470,7 @@ namespace HtmlAlign {
                                 this.Children.splice(index, 1);
                             }
 
-                            element["component"] = undefined;
+                            this.PropagateRemovedComponent(component);
                         }
                     } // fecha a iterção pelos elementos removidos
 
@@ -528,8 +574,6 @@ namespace HtmlAlign {
 
             this._behavior.Measure();
 
-            this._needMeasure = false;
-
             // se o tamanho desejado pelo componente foi modificado ele precisará arranjar novamente os filhos
             // se a delimitação de tamanho foi modificada pelo componente pai e esse componte tem tamanho relativo
             // ao componente pai ele precisará ser rearranjado
@@ -538,6 +582,7 @@ namespace HtmlAlign {
                 this.Father.NotifyToRefreshArrange();
             }
 
+            this._needMeasure = false;
             Log.Measures++;
         }
 
@@ -602,7 +647,6 @@ namespace HtmlAlign {
 
             this._needArrange = false;
             this._childNeedArrange = false;
-
             Log.Arranges++;
         }
     }

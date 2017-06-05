@@ -224,8 +224,10 @@ namespace HtmlAlign {
                 }
             }
 
+            return null;
+
             // Se nenhum foi encontrado manda o default (primeiro a ser adicionado)
-            return this._behaviors[0].GetNew();
+            //return this._behaviors[0].GetNew();
         }
         public GetBehaviorName(component: Component): string {
             if (component.Behavior != undefined) {

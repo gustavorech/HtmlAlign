@@ -1,18 +1,527 @@
 
-dock {
-    --size: 100%[520~] ~;
+html {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 80px;
+    color: #444;
 }
 
-.menu {
-    --size: 220 ~;
-    --dock: left;
+panel, in, stack, fit {
+    --size: ~100%;
 }
 
-.main {
-    --dock: fit;
+.encapsulate {
+    --size: 100%;
+    background-color: gray;
+    padding: 5px;
 }
 
-    .main > panel {
-        --size: 100%[~880] ~;
-        --align: center top;
+.encapsulate-container {
+    --behavior: fit;
+    --size: 4252 5669;
+    --align: center;
+    padding: 80px;
+    background-color: white;
+    box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.15)
+}
+
+.banner-wrapper {
+    --stack: top;
+    --size: 100%;
+}
+
+.head-container {
+    --size: 100% 15%;
+    text-align: center;
+    background-color: white;
+}
+
+    .head-container > .img-left {
+        --align: top left;
+        --size: 15% 100%;
+        background: url(img/pucrs-logo.png) center no-repeat;
+        background-size: 100%;
+    }
+
+    .head-container > .img-right {
+        --align: top right;
+        --size: 15% 100%;
+        background: url(img/facin-logo.png) center no-repeat;
+        background-size: 100%;
+        margin: 40px;
+    }
+
+    .head-container > .center {
+        --align: center;
+        --size: 70% ~;
+        --stack: top;
+        font-weight: 400;
+        text-align: center;
+        font-size: 100px;
+        color: black;
+        padding: 100px;
+    }
+
+        .head-container > .center > in {
+            --align: center;
+            font-size: 80px;
+        }
+
+            .head-container > .center > in:nth-child(1) {
+                font-weight: 500;
+                font-size: 100px;
+                color: #313358;
+            }
+
+            .head-container > .center > in:nth-child(2) {
+                font-size: 100px;
+            }
+
+            .head-container > .center > in:nth-child(4),
+            .head-container > .center > in:nth-child(5) {
+                font-weight: 300;
+                font-size: 70px;
+            }
+
+/* css para o corpo do banner */
+.body-container {
+    --size: 100% *;
+    --stack: top;
+    margin-top: 20px;
+}
+
+.chamada {
+    font-size: 60px;
+    margin-top: 60px;
+    padding: 40px;
+    text-align: center;
+    background-color: #f3f4f6;
+}
+
+    .chamada .title {
+        font-size: 80px;
+        font-weight: 500;
+        color: #313358;
+    }
+
+.texto-projeto {
+    --size: 100% ~;
+    padding-top: 60px;
+}
+
+    .texto-projeto > .left {
+        --stack: top;
+        --align: left;
+        --size: 49.5% 100%;
+    }
+
+    .texto-projeto > .right {
+        --stack: top;
+        --align: right;
+        --size: 49.5% 100%;
+    }
+
+.container-texto {
+    --stack: top;
+}
+
+    .container-texto .title {
+        font-size: 80px;
+        font-weight: 500;
+        padding: 20px;
+        color: #313358;
+    }
+
+    .container-texto .subtitle {
+        font-size: 60px;
+        font-weight: 500;
+        padding: 0 20px;
+    }
+
+.container-texto .texto {
+    font-size: 50px;
+    text-align: justify;
+    text-indent: 160px;
+    padding: 20px;
+}
+
+.features {
+    margin-top: 40px;
+    --size: 100% 300;
+}
+
+.features > .split {
+    margin-left: 40px;
+}
+
+    .features > stack {
+        --stack: top;
+        --size: * ~;
+        border: 5px solid #6b6d91;
+    }
+
+        .features > stack > .title {
+            --size: 100% ~;
+            background-color: #6b6d91;
+            padding: 5px;
+        }
+
+            .features > stack > .title > in {
+                --align: center top;
+                color: white;
+                font-size: 50px;
+            }
+
+        .features > stack > .content {
+            --size: 100% *;
+            --align: center;
+            text-align: center;
+            background-color: #f3f4f6;
+            padding: 20px 40px;
+            font-size: 40px;
+        }
+
+.container-base {
+    --stack: top;
+    --size: 100% ~;
+    margin-top: 80px;
+}
+
+    .container-base .title {
+        font-size: 80px;
+        font-weight: 500;
+        padding: 20px;
+        color: #332b52;
+    }
+
+    .container-base .subtitle {
+        font-size: 60px;
+        font-weight: 500;
+        padding: 0 20px;
+        color: #313358;
+    }
+
+    .container-base > stack {
+        --size: 100% ~;
+    }
+
+        .container-base > stack > stack {
+            --stack: top;
+            --size: * 100%;
+        }
+
+.modelo-caixa {
+    --align: center;
+    --size: 900 500;
+    background-color: #d7868c;
+    border: 5px dashed #313358;
+}
+
+.modelo-caixa in {
+    --align: top center;
+    font-size: 40px;
+    color: white;
+}
+
+    .modelo-caixa panel {
+        --align: center;
+        --size: 70%;
+        border: 5px dashed #313358;
+    }
+
+    .modelo-caixa > panel {
+        background-color: #6b6d91;
+    }
+
+        .modelo-caixa > panel > panel {
+            border: 5px solid #313358;
+            background-color: #98877e;
+        }
+
+.grid-alinhamentos {
+    --grid: * * * * *, * * * * *;
+    --align: center;
+    --size: 900 500;
+    background-color: white;
+}
+
+    .grid-alinhamentos > panel {
+        --size: 100%;
+        margin: 5px;
+        background-color: #f3f4f6;
+    }
+
+    .grid-alinhamentos in {
+        --align: center;
+        font-size: 40px;
+        text-align: center;
+        color: #6b6d91;
+    }
+
+    .grid-alinhamentos > panel > panel {
+        --size: 33%;
+        background-color: #d7868c;
+        border: 2px solid #98877e;
+    }
+
+    .grid-alinhamentos .hs {
+        --size: ~ 33%;
+    }
+
+    .grid-alinhamentos .vs {
+        --size: 33% ~;
+    }
+
+.delimitacoes {
+    --stack: top;
+    --size: 900 452;
+    margin-left: 20px;
+}
+
+.delimitacoes > stack {
+    --stack: top;
+    --size: 100% *;
+}
+
+    .delimitacoes > stack > in {
+        font-size: 40px;
+        color: #6b6d91;
+    }
+
+.delimitacoes > stack > stack {
+    --stack: left;
+}
+
+    .delimitacoes > stack > stack > in {
+        --size: ~;
+        margin-left: 20px;
+        margin-top: 5px;
+        font-size: 40px;
+        background-color: #f3f4f6;
+        padding: 2px 10px;
+        color: #98877e;
+    }
+
+.exemplo-declaracao {
+    --stack: top;
+    --align: center;
+    padding: 20px;
+}
+
+    .exemplo-declaracao > in {
+        font-size: 55px;
+    }
+
+    .exemplo-declaracao > in.recuo {
+        margin-left: 80px;
+    }
+
+.class {
+    color: #d7868c;
+}
+
+.property {
+    color: #6b6d91;
+}
+
+.value {
+    color: #98877e;
+}
+
+.container-comportamentos {
+    --stack: top;
+    --size: 100% ~;
+    margin-top: 120px;
+}
+
+    .container-comportamentos .title {
+        font-size: 80px;
+        font-weight: 500;
+        padding: 20px;
+        color: #313358;
+    }
+
+    .container-comportamentos .subtitle {
+        font-size: 60px;
+        font-weight: 500;
+        padding: 0 20px;
+        color: #313358;
+    }
+
+    .container-comportamentos > stack {
+        --size: 100% ~;
+    }
+
+        .container-comportamentos > stack > stack {
+            --stack: top;
+            --size: * 100%;
+        }
+
+.panel-exemplo {
+    --size: 700 500;
+    --align: center;
+    background-color: #f3f4f6;
+    padding: 10px;
+}
+
+    .panel-exemplo > panel:nth-child(1) {
+        --align: top left;
+        --size: 100;
+        background-color: #d7868c;
+    }
+
+    .panel-exemplo > panel:nth-child(2) {
+        --align: bottom left;
+        --size: 120;
+        background-color: #98877e;
+    }
+
+    .panel-exemplo > panel:nth-child(3) {
+        --align: top right;
+        --size: 100 140;
+        background-color: #6b6d91;
+    }
+
+    .panel-exemplo > panel:nth-child(4) {
+        --align: center;
+        --size: 250;
+        background-color: #6b6d91;
+        padding: 10px;
+    }
+
+        .panel-exemplo > panel:nth-child(4) > panel:nth-child(1) {
+            --align: right center;
+            --size: 50;
+            background-color: #98877e;
+        }
+
+        .panel-exemplo > panel:nth-child(4) > panel:nth-child(2) {
+            --align: bottom center;
+            --size: 80 30;
+            background-color: #d7868c;
+        }
+
+        .panel-exemplo > panel:nth-child(4) > panel:nth-child(3) {
+            --align: top center;
+            --size: 30 80;
+            background-color: #f3f4f6;
+        }
+
+.stack-exemplo {
+    --size: 700 500;
+    --align: center;
+    background-color: #f3f4f6;
+}
+
+    .stack-exemplo > stack {
+        background-color: #98877e;
+    }
+
+        .stack-exemplo > stack > panel {
+            background-color: #d7868c;
+            --size: 80;
+            margin: 5px;
+        }
+
+        .stack-exemplo > stack > panel > in {
+            font-size: 40px;
+            --align: center;
+            color: white;
+        }
+
+        .stack-exemplo > stack:nth-child(1) {
+            --align: top left;
+        }
+
+        .stack-exemplo > stack:nth-child(2) {
+            --align: right center;
+            --stack: right;
+        }
+
+        .stack-exemplo > stack:nth-child(3) {
+            --align: bottom left;
+            --stack: top;
+        }
+
+        .stack-exemplo > stack:nth-child(4) {
+            --align: bottom right;
+            --stack: left;
+        }
+
+.wrap-exemplo {
+    --size: 700 500;
+    --align: center;
+    background-color: #f3f4f6;
+}
+
+    .wrap-exemplo > panel {
+        --size: 120;
+        margin: 10px;
+        background-color: #6b6d91;
+    }
+
+    .wrap-exemplo > panel > in {
+        --align: center;
+        font-size: 40px;
+        color: white;
+    }
+
+.dock-exemplo {
+    --size: 700 500;
+    --align: center;
+}
+
+    .dock-exemplo .left {
+        --dock: left;
+        --size: 10% ~;
+        background-color: #d7868c;
+        margin: 5px;
+    }
+
+    .dock-exemplo .top {
+        --dock: top;
+        --size: ~ 10%;
+        background-color: #6b6d91;
+        margin: 5px;
+    }
+
+    .dock-exemplo .right {
+        --dock: right;
+        --size: 10% ~;
+        background-color: #98877e;
+        margin: 5px;
+    }
+
+    .dock-exemplo .bottom {
+        --dock: bottom;
+        --size: ~ 10%;
+        background-color: #f3f4f6;
+        margin: 5px;
+    }
+
+.grid-exemplo {
+    --size: 700 500;
+    --align: center;
+    --grid: 20% * *, 50 150 *;
+    background-color: #f3f4f6;
+}
+
+    .grid-exemplo > panel {
+        --size: 100%;
+        margin: 10px;
+        background-color: #98877e;
+    }
+
+.container-footer {
+    --size: 100% 720;
+    margin-top: 120px;
+    padding: 40px;
+    background-color: #f3f4f6;
+}
+
+    .container-footer > .img {
+        --align: top left;
+        --size: 33% 100%;
+        background: url(img/layout.png) center no-repeat;
+        background-size: 100%;
     }

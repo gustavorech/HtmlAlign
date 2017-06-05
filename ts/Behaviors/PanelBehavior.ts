@@ -181,6 +181,75 @@ namespace HtmlAlign {
         }
     }
 
+    export class CascadeUpdateCssProperty implements ICssProperty {
+        private cascadeExpAlign = /^\s*(none|all|\d*).*$/;
+
+        public Name = "--cascade";
+        public Context = CssPropertyContext.Component;
+
+        public DefaultValue(): string {
+            return "none";
+        }
+
+        public SetValueFromCssProperty(valueString: string, component: Component) {
+            var matchsCascade: RegExpExecArray = this.cascadeExpAlign.exec(valueString);
+            var cascade: string = matchsCascade[1];
+
+            if (!cascade || cascade == "none") {
+                component.CascadeUpdateLength = 0;
+            }
+            else if (cascade == "all") {
+                component.CascadeUpdateLength = Number.POSITIVE_INFINITY;
+            }
+            else {
+                component.CascadeUpdateLength = Number.parseInt(cascade) || 0;
+            }
+        }
+        public GetValueStringFromComponent(component: Component): string {
+            if (component.CascadeUpdateLength == 0) {
+                return "none";
+            }
+            else if (component.CascadeUpdateLength == Number.POSITIVE_INFINITY) {
+                return "all";
+            }
+            else {
+                return component.CascadeUpdateLength.toString();
+            }
+        }
+    }
+
+    export class HoverCssProperty implements ICssProperty {
+        private hoverExpAlign = /^\s*(none|refresh).*$/;
+
+        public Name = "--hover";
+        public Context = CssPropertyContext.Component;
+
+        public DefaultValue(): string {
+            return "none";
+        }
+
+        public SetValueFromCssProperty(valueString: string, component: Component) {
+            var matchsHover: RegExpExecArray = this.hoverExpAlign.exec(valueString);
+            var hover
+                : string = matchsHover[1];
+
+            if (!hover || hover == "none") {
+                component.UpdateOnHover = false;
+            }
+            else {
+                component.UpdateOnHover = true;
+            }
+        }
+        public GetValueStringFromComponent(component: Component): string {
+            if (!component.UpdateOnHover) {
+                return "none";
+            }
+            else {
+                return "update";
+            }
+        }
+    }
+
     export class DisplayCssProperty implements ICssProperty {
         public Name = "display";
         public Context = CssPropertyContext.Component;
