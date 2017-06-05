@@ -516,12 +516,24 @@ panel, in, stack, fit {
     --size: 100% 720;
     margin-top: 120px;
     padding: 40px;
-    background-color: #f3f4f6;
 }
 
     .container-footer > .img {
         --align: top left;
-        --size: 33% 100%;
+        --size: 40% 100%;
         background: url(img/layout.png) center no-repeat;
         background-size: 100%;
     }
+
+    .container-footer > .final {
+        --align: top right;
+        --size: 60% 100%;
+        margin-left: 40px;
+    }
+
+        .container-footer > .final > .title {
+            --align: center;
+            font-size: 60px;
+            font-weight: 500;
+            color: #313358;
+        }
