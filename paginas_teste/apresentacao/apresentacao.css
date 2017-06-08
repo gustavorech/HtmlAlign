@@ -11,13 +11,13 @@ panel, in, stack, fit {
 }
 
 .encapsulate {
-    --size: 100%;
+    --size: ~;
     background-color: gray;
     padding: 5px;
 }
 
 .encapsulate-container {
-    --behavior: fit;
+    --behavior: panel;
     --size: 4252 5669;
     --align: center;
     padding: 80px;

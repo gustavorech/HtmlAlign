@@ -1000,10 +1000,16 @@ var HtmlAlign;
                 HtmlAlign.Log.BehaviorArranges++;
             }
             else if (this._childNeedArrange) {
-                for (var index = 0; index < this.Children.length; index++) {
-                    var child = this.Children[index];
-                    if (child.NeedArrange) {
-                        this.Children[index].Arrange();
+                // temporário, precisa melhorar
+                if (this._behavior.Name == "fit") {
+                    this._behavior.Arrange();
+                }
+                else {
+                    for (var index = 0; index < this.Children.length; index++) {
+                        var child = this.Children[index];
+                        if (child.NeedArrange) {
+                            this.Children[index].Arrange();
+                        }
                     }
                 }
             }
@@ -2887,8 +2893,8 @@ var HtmlAlign;
     var _lastStateDevTools = false;
     function IsDevToolsOpen() {
         var threshold = HtmlAlign.Config.DevToolsTreshhold;
-        var widthThreshold = window.outerWidth - window.innerWidth > threshold;
-        var heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        var widthThreshold = window.outerWidth - (window.innerWidth * window.devicePixelRatio) > threshold;
+        var heightThreshold = window.outerHeight - (window.innerHeight * window.devicePixelRatio) > threshold;
         if (!(heightThreshold && widthThreshold) &&
             ((window["Firebug"] && window["Firebug"].chrome &&
                 window["Firebug"].chrome.isInitialized) || widthThreshold || heightThreshold)) {
