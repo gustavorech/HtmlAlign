@@ -370,8 +370,8 @@ namespace HtmlAlign {
     var _lastStateDevTools = false;
     function IsDevToolsOpen(): boolean {
         var threshold = Config.DevToolsTreshhold;
-        var widthThreshold = window.outerWidth - window.innerWidth > threshold;
-        var heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        var widthThreshold = window.outerWidth - (window.innerWidth * window.devicePixelRatio) > threshold;
+        var heightThreshold = window.outerHeight - (window.innerHeight * window.devicePixelRatio) > threshold;
 
         if (!(heightThreshold && widthThreshold) &&
             ((window["Firebug"] && window["Firebug"].chrome &&
