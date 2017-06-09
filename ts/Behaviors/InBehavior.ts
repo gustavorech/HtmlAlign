@@ -82,7 +82,9 @@ namespace HtmlAlign {
 
                 this.Measure();
 
-                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+                if (this.Component.H.ComponentSpace.Size > this.Component.H.GivedSpace.Size
+                    || this.Component.H.ComponentDesired < this.Component.H.ComponentSpace.Size
+                    || !this._widthIsMaxContent) {
                     this._widthIsMaxContent = false;
                     var width = this.Component.H.ComponentSpace.Size;
 
@@ -94,7 +96,9 @@ namespace HtmlAlign {
                 }
             }
 
-            if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
+            if (this.Component.V.ComponentSpace.Size > this.Component.V.GivedSpace.Size
+                || this.Component.V.ComponentDesired < this.Component.V.ComponentSpace.Size
+                || !this._heightIsMaxContent) {
                 this._heightIsMaxContent = false;
                 var height = this.Component.V.ComponentSpace.Size;
 

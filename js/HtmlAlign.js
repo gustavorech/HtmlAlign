@@ -1637,7 +1637,9 @@ var HtmlAlign;
                 this.Component.H.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.H.GivedSpace.Size, this.Component.H.GivedSpace.Size);
                 this.Component.V.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.V.GivedSpace.Size, this.Component.V.GivedSpace.Size);
                 this.Measure();
-                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+                if (this.Component.H.ComponentSpace.Size > this.Component.H.GivedSpace.Size
+                    || this.Component.H.ComponentDesired < this.Component.H.ComponentSpace.Size
+                    || !this._widthIsMaxContent) {
                     this._widthIsMaxContent = false;
                     var width = this.Component.H.ComponentSpace.Size;
                     if (width < 0) {
@@ -1646,7 +1648,9 @@ var HtmlAlign;
                     this.Component.Element.style.width = width + "px";
                 }
             }
-            if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
+            if (this.Component.V.ComponentSpace.Size > this.Component.V.GivedSpace.Size
+                || this.Component.V.ComponentDesired < this.Component.V.ComponentSpace.Size
+                || !this._heightIsMaxContent) {
                 this._heightIsMaxContent = false;
                 var height = this.Component.V.ComponentSpace.Size;
                 if (height < 0) {
