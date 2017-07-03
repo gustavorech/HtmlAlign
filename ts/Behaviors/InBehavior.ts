@@ -69,29 +69,32 @@ namespace HtmlAlign {
 
                 var rect = this.Component.Element.getBoundingClientRect();
 
-                this.Component.H.ActualSize = this.Component.H.ContentDesired =
+                this.Component.H.ContentDesired =
                     rect.width - this.Component.H.Border.Sum() - this.Component.H.Padding.Sum();
 
-                this.Component.V.ActualSize = this.Component.V.ContentDesired =
+                this.Component.V.ContentDesired =
                     rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
+
+                console.log(rect.width);
+                this.Component.H.ActualSize = rect.width;
+                this.Component.V.ActualSize = rect.height;
             }
         }
 
         public Arrange(): void {
-            var needRefreshLayout = false;
             if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
 
                 this.Component.H.GivedDelimiter = new SizeDelimiter(this.Component.H.GivedSpace.Size, this.Component.H.GivedSpace.Size);
                 this.Component.V.GivedDelimiter = new SizeDelimiter(this.Component.V.GivedSpace.Size, this.Component.V.GivedSpace.Size);
 
                 this.Measure();
+            }
 
-                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
-                    this._widthIsMaxContent = false;
-                }
-                else {
-                    this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
-                }
+            if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+                this._widthIsMaxContent = false;
+            }
+            else {
+                this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
             }
 
             if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {

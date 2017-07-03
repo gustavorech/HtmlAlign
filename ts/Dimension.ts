@@ -377,6 +377,7 @@ namespace HtmlAlign {
         // passo 4: popular valores de layout
         public RefreshLayout(component: Component, axis: Axis): void {
             if (axis == Axis.Horizontal) {
+                console.log(this._actualSize);
                 if (this._actualSize != this._componentSpace.Size) {
                     this._actualSize = this._componentSpace.Size;
                     this._actualSize = this._actualSize > 0 ? this._actualSize : 0;

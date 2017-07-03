@@ -515,6 +515,7 @@ var HtmlAlign;
         // passo 4: popular valores de layout
         RefreshLayout(component, axis) {
             if (axis == HtmlAlign.Axis.Horizontal) {
+                console.log(this._actualSize);
                 if (this._actualSize != this._componentSpace.Size) {
                     this._actualSize = this._componentSpace.Size;
                     this._actualSize = this._actualSize > 0 ? this._actualSize : 0;
@@ -1432,24 +1433,26 @@ var HtmlAlign;
                     this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");
                 }
                 var rect = this.Component.Element.getBoundingClientRect();
-                this.Component.H.ActualSize = this.Component.H.ContentDesired =
+                this.Component.H.ContentDesired =
                     rect.width - this.Component.H.Border.Sum() - this.Component.H.Padding.Sum();
-                this.Component.V.ActualSize = this.Component.V.ContentDesired =
+                this.Component.V.ContentDesired =
                     rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
+                console.log(rect.width);
+                this.Component.H.ActualSize = rect.width;
+                this.Component.V.ActualSize = rect.height;
             }
         }
         Arrange() {
-            var needRefreshLayout = false;
             if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
                 this.Component.H.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.H.GivedSpace.Size, this.Component.H.GivedSpace.Size);
                 this.Component.V.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.V.GivedSpace.Size, this.Component.V.GivedSpace.Size);
                 this.Measure();
-                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
-                    this._widthIsMaxContent = false;
-                }
-                else {
-                    this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
-                }
+            }
+            if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+                this._widthIsMaxContent = false;
+            }
+            else {
+                this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
             }
             if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
                 this._heightIsMaxContent = false;
