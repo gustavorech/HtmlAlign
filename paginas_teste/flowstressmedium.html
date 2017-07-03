@@ -11,7 +11,7 @@
 
     <style>
         wrap {
-            --align: left top;
+            --align: center;
             --size: 95% ~;
             padding: 5px;
             background-color: #52ae8f;
@@ -19,13 +19,10 @@
 
             wrap > panel {
                 background-color: white;
+                --size: 25;
                 margin: 10px;
             }
 
-                wrap > panel > in {
-                    padding: 10px 15px;
-                    font-size: 30px;
-                }
     </style>
 </head>
 <body>
@@ -33,17 +30,11 @@
     <script type="text/javascript">
         function criarElementos() {
             var flow = document.getElementById("flow");
-            var styleclass = "inner1";
-            for (var i = 0; i < 1000; i++) {
 
-                var panel = document.createElement("panel");
-                var inter = document.createElement("in");
+            var panel = document.createElement("panel");                
+            flow.appendChild(panel);
 
-                inter.innerText = "[texto interno]";
-
-                panel.appendChild(inter);
-                flow.appendChild(panel);
-            }
+            setTimeout(criarElementos, 50);
         };
 
         window.addEventListener('load', function (event) {
