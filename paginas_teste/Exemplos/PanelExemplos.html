@@ -1,0 +1,727 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>15 Alinhamentos</title>
+    <script src="../../js/HtmlAlign.js"></script>
+
+    <style>
+        .exemplos { --behavior: stack; --stack: top; --align: center; }
+        .exemplo { --behavior: stack; --stack: left; --align: top left; --size: 900 ~; margin: 10px; }
+        .resultado { --behavior: panel; --align: top left; --size: 50% ~; background-color: #f0f0f0; }
+            .resultado * { background-color: rgba(107, 109, 145, 0.50); border: 1px dashed black; }
+        .codigo { --behavior: stack; --stack: top; --align: top left; --size: 50% ~; margin-left: 10px; }
+        .linha { --behavior: wrap; --wrap: left; --size: 100% ~; margin-bottom: 5px; }
+        .linha in { padding-right: 5px; }
+        .class > :first-child { font-weight: bold; }
+        .class > :nth-child(2), .class > :last-child { color: red; }
+        .prop { --behavior: wrap; --wrap: left; --align: top left; }
+        .prop.esp { font-weight: bold; background-color: #f0f0f0; }
+        .prop > :first-child { color: #5f5f5f; }
+        .prop > :last-child { color: #941b13; }
+        .desc { --behavior: in; --align: top left; --size: ~; background-color: rgba(215, 134, 140, 0.70);
+                color: white; margin: 1px; padding: 3px; }
+
+
+        /* exemplo 1 */
+        .ex1 { --behavior: panel; --align: streach; --size: ~; margin: 30px; }
+
+
+        /* exemplo 2 */
+        .ex2-c { --behavior: panel; --align: streach; --size: ~; }
+        .ex2-1 { --behavior: panel; --align: center; --size: 100 200; }
+        .ex2-2 { --behavior: panel; --align: streach center; --size: ~ 50%;  }
+
+
+        /* exemplo 3 */
+        .ex3-c { --behavior: panel; --align: streach; --size: ~ 200; }
+        .ex3-1 { --behavior: panel; --align: center; --size: 60; }
+        .ex3-2 { --behavior: panel; --align: bottom left; --size: 100; }
+        .ex3-3 { --behavior: panel; --align: bottom center; --size: 80 60; }
+        .ex3-4 { --behavior: panel; --align: top right; --size: 200 120; }
+
+
+        /* exemplo 4 */
+        .inner { --behavior: panel; --size: 70 60; margin: 1px; }
+        .ex4-1 { --behavior: stack; --stack: left; --align: left top; --size: ~; }
+        .ex4-2 { --behavior: stack; --stack: right; --align: center; --size: ~; }
+        .ex4-3 { --behavior: stack; --stack: top; --align: bottom right; --size: ~; }
+
+
+        /* exemplo 5 */
+        .ex5-c { --behavior: stack; --stack: left; --align: streach; --size: ~ 200; }
+        .ex5-1 { --behavior: panel; --align: top; --size: 70; }
+        .ex5-2 { --behavior: panel; --align: center; --size: 90; }
+        .ex5-3 { --behavior: panel; --align: bottom; --size: 170; }
+
+
+        /* exemplo 6 */
+        .ex6-c { --behavior: wrap; --wrap: left; --align: streach; --size: 100% 200; }
+
+
+        /* exemplo 7 */
+        .ex7-c { --behavior: wrap; --wrap: top; --align: streach; --size: 100% 200; }
+        .ex7-1 { --behavior: panel; --align: center; --size: 60 40; margin: 1px; }
+        .ex7-2 { --behavior: panel; --align: right; --size: 80; margin: 1px; }
+        .ex7-3 { --behavior: panel; --align: left; --size: 110 30; margin: 1px; }
+
+
+        /* exemplo 8 */
+        .ex8-c { --behavior: dock; --align: streach; --size: ~ 200; }
+        .ex8-1 { --behavior: panel; --dock: left; --align: streach; --size: ~; }
+        .ex8-2 { --behavior: panel; --dock: top; --align: streach; --size: ~; }
+        .ex8-3 { --behavior: panel; --dock: right; --align: streach; --size: ~; }
+        .ex8-4 { --behavior: panel; --dock: bottom; --align: streach; --size: ~; }
+
+
+        /* exemplo 9 */
+        .ex9-c { --behavior: grid; --grid: * * *, * * *; --align: streach; --size: ~ 200; }
+        .place { --behavior: panel; --align: streach; --size: ~; }
+
+
+        /* exemplo 10 */
+        .ex10-c { --behavior: grid; --grid: 50% ~, 120 ~; --align: center; --size: ~; }
+        .ex10-1 { --behavior: place; --place: 0 0; --align: center; }
+        .ex10-2 { --behavior: place; --place: 0 1; --align: center; --size: 150 50; }
+        .ex10-3 { --behavior: place; --place: 1 1; --align: center; }
+
+    </style>
+</head>
+<body>
+    <stack class="exemplos">
+        <!-- exemplo 1 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <panel class="ex1">
+                    <in class="desc">.ex1</in>
+                    <panel class="ex1">
+                        <in class="desc">.ex1</in>
+                        <panel class="ex1">
+                            <in class="desc">.ex1</in>
+                        </panel>
+                    </panel>
+                </panel>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>30px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>        
+        
+        <!-- exemplo 2 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <panel class="ex2-c">
+                    <in class="desc">.ex2-c</in>
+                    <panel class="ex2-1">
+                        <in class="desc">.ex2-1</in>
+                    </panel>
+                    <panel class="ex2-2">
+                        <in class="desc">.ex2-2</in>
+                    </panel>
+                </panel>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex2-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex2-1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>100 200;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex2-2</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~ 100;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>        
+        
+        <!-- exemplo 3 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <panel class="ex3-c">
+                    <in class="desc">.ex3-c</in>
+                    <panel class="ex3-1">
+                        <in class="desc">.ex3-1</in>
+                    </panel>
+                    <panel class="ex3-2">
+                        <in class="desc">.ex3-2</in>
+                    </panel>
+                    <panel class="ex3-3">
+                        <in class="desc">.ex3-3</in>
+                    </panel>
+                    <panel class="ex3-4">
+                        <in class="desc">.ex3-4</in>
+                    </panel>
+                </panel>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex3-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~ 200;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex3-1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>60;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex3-2</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>bottom left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>100;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex3-3</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>bottom center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>80 60;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex3-4</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top right;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>200 120;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+        <!-- exemplo 4 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <stack class="ex4-1">
+                    <in class="desc">.ex4-1</in>
+                    <panel class="inner"><in class="desc">.inner 1</in></panel>
+                    <panel class="inner"><in class="desc">.inner 2</in></panel>
+                    <panel class="inner"><in class="desc">.inner 3</in></panel>
+                </stack>
+                <stack class="ex4-2">
+                    <in class="desc">.ex4-2</in>
+                    <panel class="inner"><in class="desc">.inner 1</in></panel>
+                    <panel class="inner"><in class="desc">.inner 2</in></panel>
+                    <panel class="inner"><in class="desc">.inner 3</in></panel>
+                </stack>
+                <stack class="ex4-3">
+                    <in class="desc">.ex4-3</in>
+                    <panel class="inner"><in class="desc">.inner 1</in></panel>
+                    <panel class="inner"><in class="desc">.inner 2</in></panel>
+                    <panel class="inner"><in class="desc">.inner 3</in></panel>
+                </stack>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.inner</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>70 60;</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex4-1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>stack;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>left top;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex4-2</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>stack;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex4-3</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>stack;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>bottom right;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+        <!-- exemplo 5 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <stack class="ex5-c">
+                    <in class="desc">.ex5-c</in>
+                    <panel class="ex5-1">
+                        <in class="desc">.ex5-1</in>
+                    </panel>
+                    <panel class="ex5-2">
+                        <in class="desc">.ex5-2</in>
+                    </panel>
+                    <panel class="ex5-3">
+                        <in class="desc">.ex5-3</in>
+                    </panel>
+                </stack>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex5-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>stack;</in></wrap>
+                    <wrap class="prop esp"><in>--stack:</in><in>left;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~ 200;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex5-1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>70;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex5-2</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>90;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex5-3</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>bottom;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>170;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+        <!-- exemplo 6 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <wrap class="ex6-c">
+                    <in class="desc">.ex6-c</in>
+                    <panel class="inner"><in class="desc">.inner 1</in></panel>
+                    <panel class="inner"><in class="desc">.inner 2</in></panel>
+                    <panel class="inner"><in class="desc">.inner 3</in></panel>
+                    <panel class="inner"><in class="desc">.inner 4</in></panel>
+                    <panel class="inner"><in class="desc">.inner 5</in></panel>
+                    <panel class="inner"><in class="desc">.inner 6</in></panel>
+                    <panel class="inner"><in class="desc">.inner 7</in></panel>
+                    <panel class="inner"><in class="desc">.inner 8</in></panel>
+                    <panel class="inner"><in class="desc">.inner 9</in></panel>
+                    <panel class="inner"><in class="desc">.inner 10</in></panel>
+                    <panel class="inner"><in class="desc">.inner 11</in></panel>
+                    <panel class="inner"><in class="desc">.inner 12</in></panel>
+                </wrap>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.inner</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>70 60;</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex6-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>wrap;</in></wrap>
+                    <wrap class="prop esp"><in>--wrap:</in><in>left;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>100% 200;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+        <!-- exemplo 7 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <wrap class="ex7-c">
+                    <in class="desc">.ex7-c</in>
+                    <panel class="ex7-1"><in class="desc">.ex7-1</in></panel>
+                    <panel class="ex7-2"><in class="desc">.ex7-2</in></panel>
+                    <panel class="ex7-3"><in class="desc">.ex7-3</in></panel>
+                    <panel class="ex7-1"><in class="desc">.ex7-1</in></panel>
+                    <panel class="ex7-2"><in class="desc">.ex7-2</in></panel>
+                    <panel class="ex7-3"><in class="desc">.ex7-3</in></panel>
+                    <panel class="ex7-1"><in class="desc">.ex7-1</in></panel>
+                    <panel class="ex7-2"><in class="desc">.ex7-2</in></panel>
+                    <panel class="ex7-3"><in class="desc">.ex7-3</in></panel>
+                    <panel class="ex7-1"><in class="desc">.ex7-1</in></panel>
+                    <panel class="ex7-2"><in class="desc">.ex7-2</in></panel>
+                    <panel class="ex7-3"><in class="desc">.ex7-3</in></panel>
+                </wrap>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex7-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>wrap;</in></wrap>
+                    <wrap class="prop esp"><in>--wrap:</in><in>top;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>100% 200;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex7-1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>60 40;</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex7-2</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>right;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>80;</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex7-3</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>110 30;</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+        <!-- exemplo 8 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <dock class="ex8-c">
+                    <in class="desc">.ex8-c</in>
+                    <panel class="ex8-1"><in class="desc">.ex8-1</in></panel>
+                    <panel class="ex8-2"><in class="desc">.ex8-2</in></panel>
+                    <panel class="ex8-3"><in class="desc">.ex8-3</in></panel>
+                    <panel class="ex8-4"><in class="desc">.ex8-4</in></panel>
+                    <panel class="ex8-1"><in class="desc">.ex8-1</in></panel>
+                    <panel class="ex8-2"><in class="desc">.ex8-2</in></panel>
+                    <panel class="ex8-3"><in class="desc">.ex8-3</in></panel>
+                    <panel class="ex8-4"><in class="desc">.ex8-4</in></panel>
+                    <panel class="ex8-1"><in class="desc">.ex8-1</in></panel>
+                    <panel class="ex8-2"><in class="desc">.ex8-2</in></panel>
+                    <panel class="ex8-3"><in class="desc">.ex8-3</in></panel>
+                    <panel class="ex8-4"><in class="desc">.ex8-4</in></panel>
+                </dock>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex8-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>dock;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~ 200;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex8-1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--dock:</in><in>left;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex8-2</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--dock:</in><in>top;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex8-3</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--dock:</in><in>right;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex8-4</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--dock:</in><in>bottom;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+        <!-- exemplo 9 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <grid class="ex9-c">
+                    <in class="desc" style="margin-top: 30px;">.ex9-c</in>
+                    <panel class="place" style="--place: 0 0"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 0 1"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 0 2"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 1 0"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 1 1"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 1 2"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 2 0"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 2 1"><in class="desc">.place</in></panel>
+                    <panel class="place" style="--place: 2 2"><in class="desc">.place</in></panel>
+                </grid>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc-grid</in><in>{</in>
+                    <wrap class="prop"><in>margin-top:</in><in>30px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex9-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>grid;</in></wrap>
+                    <wrap class="prop esp"><in>--grid:</in><in>* * *, * * *;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~ 200;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.place</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>streach;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+        <!-- exemplo 10 -->
+        <stack class="exemplo">
+            <panel class="resultado">
+                <grid class="ex10-c">
+                    <in class="desc">.ex10-c</in>
+                    <panel class="ex10-1"><in class="desc">.ex10-1</in></panel>
+                    <panel class="ex10-2"><in class="desc">.ex10-2</in></panel>
+                    <panel class="ex10-3"><in class="desc">.ex10-3</in></panel>
+                </grid>
+            </panel>
+            <stack class="codigo">
+                <wrap class="linha class">
+                    <in>*</in><in>{</in>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(107, 109, 145, 0.50);</in></wrap>
+                    <wrap class="prop"><in>border:</in><in>1px dashed black;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.desc</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>in;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>top left;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <wrap class="prop"><in>color:</in><in>white;</in></wrap>
+                    <wrap class="prop"><in>background-color:</in><in>rgba(215, 134, 140, 0.70);</in></wrap>
+                    <wrap class="prop"><in>margin:</in><in>1px;</in></wrap>
+                    <wrap class="prop"><in>padding:</in><in>3px;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex10-c</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>grid;</in></wrap>
+                    <wrap class="prop esp"><in>--grid:</in><in>50% ~, 120 ~;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>~;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex10-1</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--place:</in><in>0 0;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex10-2</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--place:</in><in>0 1;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <wrap class="prop esp"><in>--size:</in><in>150 50;</in></wrap>
+                    <in>}</in>
+                </wrap>
+                <wrap class="linha class">
+                    <in>.ex10-3</in><in>{</in>
+                    <wrap class="prop esp"><in>--behavior:</in><in>panel;</in></wrap>
+                    <wrap class="prop esp"><in>--place:</in><in>1 1;</in></wrap>
+                    <wrap class="prop esp"><in>--align:</in><in>center;</in></wrap>
+                    <in>}</in>
+                </wrap>
+            </stack>
+        </stack>
+
+    </stack>
+</body>
+</html>

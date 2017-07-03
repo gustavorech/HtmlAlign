@@ -10,10 +10,10 @@ namespace HtmlAlign {
         public Visible = true;
         public Scroll = Scroll.None;
         public Align = Align.Start;
-        public Size = SizeRange.Default();
-        public Margin = Thickness.Default();
-        public Border = Thickness.Default();
-        public Padding = Thickness.Default();
+        public Size = new SizeRange(0, 0, 0, false, 0, false);
+        public Margin = new Thickness(0, 0);
+        public Border = new Thickness(0, 0);
+        public Padding = new Thickness(0, 0);
 
         public IsComponentDelimiterChanged = false;
         public IsComponentDesiredChanged = false;
@@ -22,17 +22,23 @@ namespace HtmlAlign {
         public IsComponentSizeChanged = false;
         public IsComponentSpaceChanged = false;
 
-        private _givedDelimiter = SizeDelimiter.Default();
-        private _componentDelimiter = SizeDelimiter.Default();
-        private _contentDelimiter = SizeDelimiter.Default();
+        private _actualSize = 0;
+        private _actualDisplacement = 0;
+        private _givedDelimiter = new SizeDelimiter(0, 0);
+        private _componentDelimiter = new SizeDelimiter(0, 0);
+        private _contentDelimiter = new SizeDelimiter(0, 0);
         private _contentDesired = 0;
         private _componentDesired = 0;
         private _componentRequired = 0;
         private _savedComponentDesired = 0;
-        private _givedSpace = Space.Default();
-        private _componentSpace = Space.Default();
-        private _contentSpace = Space.Default();
+        private _givedSpace = new Space(0, 0);
+        private _componentSpace = new Space(0, 0);
+        private _contentSpace = new Space(0, 0);
 
+        public get ActualSize(): number { return this._actualSize; }
+        public set ActualSize(value: number) { this._actualSize = value; }
+        public get ActualDisplacement(): number { return this._actualDisplacement; }
+        public set ActualDisplacement(value: number) { this._actualDisplacement = value; }
         public get GivedDelimiter(): SizeDelimiter { return this._givedDelimiter; }
         public get ComponentDelimiter(): SizeDelimiter { return this._componentDelimiter; }
         public get ContentDelimiter(): SizeDelimiter { return this._contentDelimiter; }
@@ -74,11 +80,17 @@ namespace HtmlAlign {
             return this.Size.Star;
         }
 
+        public get NeedLayout(): boolean {
+            return this._actualSize != this._componentSpace.Size
+                || this._actualDisplacement != this._componentSpace.Displacement;
+        }
+
         // passo 1: behavior informa a delimitação de tamanho
         // componente verifica qual sua delimitação e a do conteúdo
         public set GivedDelimiter(value: SizeDelimiter) {
             // inicialização
-            this._givedDelimiter.CopyFrom(value);
+            this._givedDelimiter.Min = value.Min;
+            this._givedDelimiter.Max = value.Max;
             // salva valores antigos para verificar mudança
             var lastComponentDelimiterMin = this._componentDelimiter.Min;
             var lastComponentDelimiterMax = this._componentDelimiter.Max;
@@ -155,13 +167,13 @@ namespace HtmlAlign {
             // tenta reduzir a probabilidade de um novo measure tornando o delimitador
             // mínimo igual ao máximo do delimitador passado
             // faz isso somente se o componente pai é um panel
-            //if (this.FatherIsPanel && this.Size.Star == 0
-            //    && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
-            //    && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == Align.Streach
-            //    && this._componentDelimiter.Min < this._givedDelimiter.Max) {
+            if (this.FatherIsPanel && this.Size.Star == 0
+                && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
+                && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == Align.Streach
+                && this._componentDelimiter.Min < this._givedDelimiter.Max) {
 
-            //    this._componentDelimiter.Min = this._givedDelimiter.Max;
-            //}
+                this._componentDelimiter.Min = this._givedDelimiter.Max;
+            }
 
             // verifica qual a delimitação do conteúdo que é a delimitação do componente
             // menos seus espaçamentos e borda
@@ -244,7 +256,8 @@ namespace HtmlAlign {
         // componente verifica qual o espaço para o conteúdo
         public set GivedSpace(value: Space) {
             // inicialização
-            this._givedSpace.CopyFrom(value);
+            this._givedSpace.Size = value.Size;
+            this._givedSpace.Displacement = value.Displacement;
             // salva valores antigos para verificar mudança
             var lastComponentSpaceDisplacement = this._componentSpace.Displacement;
             var lastComponentSpaceSize = this._componentSpace.Size;
@@ -359,6 +372,34 @@ namespace HtmlAlign {
             // verifica mudança e sinaliza caso houve
             this.IsComponentSpaceChanged =
                 this.IsComponentDisplacementChanged || this.IsComponentSizeChanged;
+        }
+
+        // passo 4: popular valores de layout
+        public RefreshLayout(component: Component, axis: Axis): void {
+            if (axis == Axis.Horizontal) {
+                if (this._actualSize != this._componentSpace.Size) {
+                    this._actualSize = this._componentSpace.Size;
+                    this._actualSize = this._actualSize > 0 ? this._actualSize : 0;
+                    component.Element.style.setProperty("width", this._actualSize + "px");
+                }
+                if (this._actualDisplacement != this._componentSpace.Displacement) {
+                    this._actualDisplacement = this._componentSpace.Displacement;
+                    this._actualDisplacement = this._actualDisplacement > 0 ? this._actualDisplacement : 0;
+                    component.Element.style.setProperty("left", this._actualDisplacement + "px");
+                }
+            }
+            else {
+                if (this._actualSize != this._componentSpace.Size) {
+                    this._actualSize = this._componentSpace.Size;
+                    this._actualSize = this._actualSize > 0 ? this._actualSize : 0;
+                    component.Element.style.setProperty("height", this._actualSize + "px");
+                }
+                if (this._actualDisplacement != this._componentSpace.Displacement) {
+                    this._actualDisplacement = this._componentSpace.Displacement;
+                    this._actualDisplacement = this._actualDisplacement > 0 ? this._actualDisplacement : 0;
+                    component.Element.style.setProperty("top", this._actualDisplacement + "px");
+                }
+            }
         }
     }
 }

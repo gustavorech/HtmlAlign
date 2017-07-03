@@ -169,7 +169,7 @@ namespace HtmlAlign {
 
             // Se a adição do componente a essa linha faz com que o tamanho extrapole
             // o tamanho máximo esse componente não será inserido nessa linha
-            if ((this.SumOfSizesInAxis + sizeInAxis) > this.MaxSizeInAxis) {
+            if (Math.fround((this.SumOfSizesInAxis + sizeInAxis)) > Math.fround(this.MaxSizeInAxis)) {
                 return false;
             }
 

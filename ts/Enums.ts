@@ -2,7 +2,7 @@
 
 namespace HtmlAlign {
     // Enum para definir sobre qual contexto a propriedade CSS será aplicada
-    export enum CssPropertyContext { Component = 1, Child = 2 }
+    export enum CssPropertyContext { Component = 1, Child = 2, Oi = 3 }
     // Enum para definir os valores de visibilidade possíveis
     export enum Scroll { Auto = 1, Visible = 2, None = 3 }
     // Enum para definir os valores de referência lateral possíveis

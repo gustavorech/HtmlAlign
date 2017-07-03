@@ -181,75 +181,6 @@ namespace HtmlAlign {
         }
     }
 
-    export class CascadeUpdateCssProperty implements ICssProperty {
-        private cascadeExpAlign = /^\s*(none|all|\d*).*$/;
-
-        public Name = "--cascade";
-        public Context = CssPropertyContext.Component;
-
-        public DefaultValue(): string {
-            return "none";
-        }
-
-        public SetValueFromCssProperty(valueString: string, component: Component) {
-            var matchsCascade: RegExpExecArray = this.cascadeExpAlign.exec(valueString);
-            var cascade: string = matchsCascade[1];
-
-            if (!cascade || cascade == "none") {
-                component.CascadeUpdateLength = 0;
-            }
-            else if (cascade == "all") {
-                component.CascadeUpdateLength = Number.POSITIVE_INFINITY;
-            }
-            else {
-                component.CascadeUpdateLength = Number.parseInt(cascade) || 0;
-            }
-        }
-        public GetValueStringFromComponent(component: Component): string {
-            if (component.CascadeUpdateLength == 0) {
-                return "none";
-            }
-            else if (component.CascadeUpdateLength == Number.POSITIVE_INFINITY) {
-                return "all";
-            }
-            else {
-                return component.CascadeUpdateLength.toString();
-            }
-        }
-    }
-
-    export class HoverCssProperty implements ICssProperty {
-        private hoverExpAlign = /^\s*(none|refresh).*$/;
-
-        public Name = "--hover";
-        public Context = CssPropertyContext.Component;
-
-        public DefaultValue(): string {
-            return "none";
-        }
-
-        public SetValueFromCssProperty(valueString: string, component: Component) {
-            var matchsHover: RegExpExecArray = this.hoverExpAlign.exec(valueString);
-            var hover
-                : string = matchsHover[1];
-
-            if (!hover || hover == "none") {
-                component.UpdateOnHover = false;
-            }
-            else {
-                component.UpdateOnHover = true;
-            }
-        }
-        public GetValueStringFromComponent(component: Component): string {
-            if (!component.UpdateOnHover) {
-                return "none";
-            }
-            else {
-                return "update";
-            }
-        }
-    }
-
     export class DisplayCssProperty implements ICssProperty {
         public Name = "display";
         public Context = CssPropertyContext.Component;
@@ -276,14 +207,14 @@ namespace HtmlAlign {
         }
     }
 
-    export class ScrollCssProperty implements ICssProperty {
+    export class OverflowCssProperty implements ICssProperty {
         private regExpScroll = /^\s*(auto|overlay|hidden|scroll|visible){0,1}\s*(auto|overlay|hidden|scroll|visible){0,1}.*$/;
 
         public Name = "overflow";
         public Context = CssPropertyContext.Component;
 
         public DefaultValue(): string {
-            return "hidden";
+            return "visible";
         }
 
         public SetValueFromCssProperty(valueString: string, component: Component) {
@@ -312,12 +243,7 @@ namespace HtmlAlign {
             }
         }
         public GetValueStringFromComponent(component: Component): string {
-            if (component.Visible) {
-                return "block";
-            }
-            else {
-                return "none";
-            }
+            return "";
         }
     }
 
@@ -518,7 +444,7 @@ namespace HtmlAlign {
         static AlignCssProperty = new AlignCssProperty();
         static SizeCssProperty = new SizeCssProperty();
         static DisplayCssProperty = new DisplayCssProperty();
-        static ScrollCssProperty = new ScrollCssProperty();
+        static OverflowCssProperty = new OverflowCssProperty();
 
         static MarginLeftCssProperty = new MarginLeftCssProperty();
         static MarginTopCssProperty = new MarginTopCssProperty();
@@ -544,7 +470,7 @@ namespace HtmlAlign {
         public GetCssProperties(): ICssProperty[] {
             return [PanelBehavior.BehaviorCssProperty, PanelBehavior.AlignCssProperty,
                 PanelBehavior.SizeCssProperty, PanelBehavior.DisplayCssProperty,
-                PanelBehavior.ScrollCssProperty, PanelBehavior.MarginLeftCssProperty,
+                PanelBehavior.OverflowCssProperty, PanelBehavior.MarginLeftCssProperty,
                 PanelBehavior.MarginTopCssProperty, PanelBehavior.MarginRightCssProperty,
                 PanelBehavior.MarginBottomCssProperty, PanelBehavior.BorderLeftCssProperty,
                 PanelBehavior.BorderTopCssProperty, PanelBehavior.BorderRightCssProperty,

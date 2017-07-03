@@ -43,7 +43,7 @@
             panel.innerText = ++count;
             panel.setAttribute("style", "--size: " + (count) + ";");
             panel.setAttribute("hover", "");
-            panel.addEventListener("click", function () {            
+            panel.addEventListener("click", function () {
                 panel.component.Width = {
                     width: panel.component.Width.width * 2 * Math.random()
                 };
@@ -52,7 +52,72 @@
                     height: panel.component.Width.width * 2 * Math.random()
                 };
             });
-            flow.appendChild(panel);
+            if (flow.firstChild == undefined) flow.appendChild(panel);
+            else flow.insertBefore(panel, flow.firstChild);
+
+            var panel = document.createElement("in");
+            panel.innerText = ++count;
+            panel.setAttribute("style", "--size: " + (count) + ";");
+            panel.setAttribute("hover", "");
+            panel.addEventListener("click", function () {
+                panel.component.Width = {
+                    width: panel.component.Width.width * 2 * Math.random()
+                };
+
+                panel.component.Height = {
+                    height: panel.component.Width.width * 2 * Math.random()
+                };
+            });
+            if (flow.firstChild == undefined) flow.appendChild(panel);
+            else flow.insertBefore(panel, flow.firstChild);
+
+            var panel = document.createElement("in");
+            panel.innerText = ++count;
+            panel.setAttribute("style", "--size: " + (count) + ";");
+            panel.setAttribute("hover", "");
+            panel.addEventListener("click", function () {
+                panel.component.Width = {
+                    width: panel.component.Width.width * 2 * Math.random()
+                };
+
+                panel.component.Height = {
+                    height: panel.component.Width.width * 2 * Math.random()
+                };
+            });
+            if (flow.firstChild == undefined) flow.appendChild(panel);
+            else flow.insertBefore(panel, flow.firstChild);
+
+            var panel = document.createElement("in");
+            panel.innerText = ++count;
+            panel.setAttribute("style", "--size: " + (count) + ";");
+            panel.setAttribute("hover", "");
+            panel.addEventListener("click", function () {
+                panel.component.Width = {
+                    width: panel.component.Width.width * 2 * Math.random()
+                };
+
+                panel.component.Height = {
+                    height: panel.component.Width.width * 2 * Math.random()
+                };
+            });
+            if (flow.firstChild == undefined) flow.appendChild(panel);
+            else flow.insertBefore(panel, flow.firstChild);
+
+            var panel = document.createElement("in");
+            panel.innerText = ++count;
+            panel.setAttribute("style", "--size: " + (count) + ";");
+            panel.setAttribute("hover", "");
+            panel.addEventListener("click", function () {
+                panel.component.Width = {
+                    width: panel.component.Width.width * 2 * Math.random()
+                };
+
+                panel.component.Height = {
+                    height: panel.component.Width.width * 2 * Math.random()
+                };
+            });
+            if (flow.firstChild == undefined) flow.appendChild(panel);
+            else flow.insertBefore(panel, flow.firstChild);
 
             //for (var index = 0; index < flow.component.Children.length; index++) {
             //    var child = flow.component.Children[index];
@@ -61,8 +126,6 @@
             //}
 
 
-            if (flow.firstChild == undefined) flow.appendChild(panel);
-            else flow.insertBefore(panel, flow.firstChild);
 
             setTimeout(criarElementos, 4);
         };

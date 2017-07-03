@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>15 Alinhamentos</title>
+    <script src="../js/HtmlAlign.js"></script>
+
+    <style>
+        [div] { --size: 100% ~; }
+        [div0] { --size: ~100% ~; }
+        [div1] { --size: 10% ~; }
+        [div2] { --size: 20% ~; }
+        [div3] { --size: 30% ~; }
+        [div4] { --size: 40% ~; }
+        [div5] { --size: 50% ~; }
+        [div6] { --size: 60% ~; }
+        [div7] { --size: 70% ~; }
+        [div8] { --size: 80% ~; }
+        [div9] { --size: 90% ~; }
+
+        .container {
+            --align: center top;
+            --size: 80%[400~1200] ~;
+        }
+
+        .test wrap {
+            margin: 5px;
+            padding: 20px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <wrap div class="container">
+        <wrap div class="test">
+            <wrap div></wrap>
+            <wrap div></wrap>
+            <wrap div></wrap>
+        </wrap>
+        <wrap div class="test">
+            <wrap div6></wrap>
+            <wrap div4></wrap>
+            <wrap div></wrap>
+        </wrap>
+        <wrap div class="test">
+            <wrap div2></wrap>
+            <wrap div2></wrap>
+            <wrap div2></wrap>
+            <wrap div2></wrap>
+            <wrap div2></wrap>
+        </wrap>
+        <wrap div class="test">
+            <panel div>
+                <wrap style="--align: streach center">
+                    <wrap div3></wrap>
+                    <wrap div3></wrap>
+                    <wrap div3></wrap>
+                </wrap>
+            </panel>
+        </wrap>
+    </wrap>
+</body>
+</html>

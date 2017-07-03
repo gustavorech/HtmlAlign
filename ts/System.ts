@@ -1,7 +1,4 @@
 ﻿
-// [TODO] : para componentes não panel, se misturar porcentagens e valores fixos podem haver problemas
-// criar um sistema de medida que adereça esses problemas
-
 /// <reference path='Component.ts'/>
 /// <reference path='Behaviors/PanelBehavior.ts' />
 /// <reference path='Behaviors/InBehavior.ts' />
@@ -25,6 +22,10 @@ namespace HtmlAlign {
         private _root: Component;
         private _baseStyleElement: HTMLStyleElement;
 
+        public _notifyChildrenChangedList: Component[] = [];
+        public _notifyCssPropertyChangedList: Component[] = [];
+        public _cancelNextRefreshByMeasure = false;
+
         public MaxContentString = "max-content";
 
         constructor() {
@@ -42,6 +43,26 @@ namespace HtmlAlign {
             this.RegisterBehavior(new FitBehavior());
 
             this.RefreshBaseStyle();
+        }
+
+        private _processoChanges() {
+            this._cancelNextRefreshByMeasure = true;
+
+            var _qtdChildrenChanged = this._notifyChildrenChangedList.length;
+            var _qtdCssPropertiesChanged = this._notifyCssPropertyChangedList.length;
+
+            for (var i = 0; i < _qtdChildrenChanged; i++) {
+                this._notifyChildrenChangedList[i].NotifyChildrenChanged();
+            }
+
+            for (var i = 0; i < _qtdCssPropertiesChanged; i++) {
+                this._notifyCssPropertyChangedList[i].NotifyChildrenChanged();
+            }
+
+            this._notifyChildrenChangedList.splice(0, _qtdChildrenChanged);
+            this._notifyCssPropertyChangedList.splice(0, _qtdCssPropertiesChanged);
+
+            this._cancelNextRefreshByMeasure = false;
         }
 
         public RefreshBaseStyle(): void {
@@ -106,7 +127,6 @@ namespace HtmlAlign {
             }
 
             this._baseStyleElement = document.createElement("style");
-            this._baseStyleElement.title = "text/css";
             this._baseStyleElement.appendChild(document.createTextNode(cssList.join("\n")));
 
             if (document.head.firstChild != undefined) {
@@ -122,33 +142,48 @@ namespace HtmlAlign {
         }
 
         public Init(): void {
+            var hSize = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var vSize = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
             // inicializa o componente raiz
             // adiciona um componente pai ao componente raiz
             // esse componente será o finalizador da propagação de notificação de atualização
-            var rootFather = <Component>{ Behavior: { } };
+            var rootFather = <Component>{ Behavior: {} };
             rootFather.NotifyNeedMeasure = function () {
-                HtmlAlign.RefreshLayout();
                 Log.RootMeasuresNotified++;
+
+                if (this._cancelNextRefreshByMeasure) {
+                    this._cancelNextRefreshByMeasure = false;
+                }
+                else {
+                    setTimeout(HtmlAlign.RefreshLayout, 4);
+                }
             };
-            rootFather.NotifyToRefreshArrange = function () { Log.RootArrangesNotified++; };
-            rootFather.NotifyArrange = function () { Log.RootArrangesNotified++; };
+            rootFather.NotifyNeedArrange =
+            rootFather.NotifyChildNeedArrange = function () { Log.RootArrangesNotified++; };
+            rootFather.NotifyChildNeedLayout = function () { };
 
             this._root = new Component(rootFather, document.body);
-            document.body["component"] = this._root;        
+            this._root.ProcessCssPropertiesChanged = function () { };
+            document.body["component"] = this._root;
 
-            // popula os tamanhos iniciais
-            this.RefreshRootSize();
-
+            this._root.H.Size.Min = hSize;
+            this._root.V.Size.Min = vSize;
+            
             this.ExecuteRefreshLayout();
         }
 
         public ExecuteRefreshLayout(): void {
+            this._processoChanges();
+
             this._root.Measure(SizeDelimiter.Default(), SizeDelimiter.Default());
 
             this._root.H.GivedSpace = new Space(0, this._root.H.ComponentRequired);
             this._root.V.GivedSpace = new Space(0, this._root.V.ComponentRequired);
 
             this._root.Arrange();
+
+            this._root.ProcessLayout();
         }
 
         public RefreshValuesFromCssProperties(component: Component) {
@@ -175,11 +210,11 @@ namespace HtmlAlign {
         }
 
         public RefreshRootSize(): void {
-            var rootWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            var rootHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            this._root.H.Size.Min = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            this._root.V.Size.Min = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-            this._root.Width = { min: rootWidth, max: Number.POSITIVE_INFINITY };
-            this._root.Height = { min: rootHeight, max: Number.POSITIVE_INFINITY };
+            this._root.NotifyNeedMeasure();
+            HtmlAlign.RefreshLayout();
         }
 
         public RegisterBehavior(behavior: IBehavior): void {
@@ -225,9 +260,6 @@ namespace HtmlAlign {
             }
 
             return null;
-
-            // Se nenhum foi encontrado manda o default (primeiro a ser adicionado)
-            //return this._behaviors[0].GetNew();
         }
         public GetBehaviorName(component: Component): string {
             if (component.Behavior != undefined) {
@@ -263,17 +295,12 @@ namespace HtmlAlign {
                 }
             }
 
-            // a fonte afetará o tamanho do conteúdo, por isso ela precisa ser salva
-            if (component.IsContent) {
-                cssText += computed.getPropertyValue("font");
-            }
-
             if (component.FatherAttached["lastCssText"] == undefined || refreshValuesFirst) {
                 component.FatherAttached["lastCssText"] = cssText;
             }
             else if (component.FatherAttached["lastCssText"] != cssText) {
                 component.FatherAttached["lastCssText"] = cssText;
-                component.NotifyTagChanged();
+                component.NotifyCssPropertiesChanged();
             }
 
             for (var index = 0; index < component.Children.length; index++) {
@@ -282,7 +309,7 @@ namespace HtmlAlign {
         }
         
         private ForceRereadAllCssProperties(component: Component): void {
-            component.NotifyTagChanged();
+            component.NotifyCssPropertiesChanged();
 
             for (var index = 0; index < component.Children.length; index++) {
                 this.ForceRereadAllCssProperties(component.Children[index]);
@@ -298,13 +325,13 @@ namespace HtmlAlign {
     export function RefreshLayout(): void {
         if (!_waitingToRefresh && !_hasRefreshGuarantee) {
             _waitingToRefresh = true;
-
-            setTimeout(_refreshProtection, 12);
+            
+            _refreshProtection();
         }
         else if (_inRefreshingProcess && !_hasRefreshGuarantee) {
             _hasRefreshGuarantee = true;
 
-            setTimeout(_refreshGuarantee, 4);
+            requestAnimationFrame(_refreshGuarantee);
         }
     };
     
@@ -316,8 +343,8 @@ namespace HtmlAlign {
     function _refreshProtection(): void {
         if (!_inRefreshingProcess) {
             _inRefreshingProcess = true;
-
-            setTimeout(_refresh, 4);
+            
+            _refresh();
         }
     }
 
@@ -402,8 +429,9 @@ namespace HtmlAlign {
     };
 
     var observer = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
-        for (var indexComponent: number = 0; indexComponent < mutations.length; indexComponent++) {
-            var mutationRecord: MutationRecord = mutations[indexComponent];
+        var qtdList = mutations.length;
+        for (var indexRecord = 0; indexRecord < qtdList; indexRecord++) {
+            var mutationRecord: MutationRecord = mutations[indexRecord];
             // se foi uma atualização de texto ou de uma tag que não implementa nenhum comportamento
             // é feita uma pesquisa subindo na árvore DOM por qual é o primeiro componente pai em que
             // essa atualização está contida, se esse componente é um conteúdo é disparada uma rotina
@@ -415,7 +443,7 @@ namespace HtmlAlign {
                         var component: Component = element["component"];
 
                         if (component.Behavior.Name == "in") {
-                            component.NotifyTagChanged();
+                            Layout._notifyCssPropertyChangedList.push(component);
                             break;
                         }
                         else {
@@ -437,19 +465,24 @@ namespace HtmlAlign {
                     if (mutationRecord.attributeName == "style" && element["laststyle"] == element.getAttribute("style")) {
                         continue;
                     }
-                    
-                    component.NotifyTagChanged();
+
+                    Layout._notifyCssPropertyChangedList.push(component);
                 }
 
                 for (var index = 0; index < mutationRecord.removedNodes.length; index++) {
-                    component.NotifyRemoved(<HTMLElement>mutationRecord.removedNodes[index]);
+                    Layout._notifyChildrenChangedList.push(component);
                 }
 
                 // possível melhora, os elementos aparecem duplicados na lista
                 for (var index = 0; index < mutationRecord.addedNodes.length; index++) {
-                    component.NotifyAdded(<HTMLElement>mutationRecord.addedNodes[index]);
+                    Layout._notifyChildrenChangedList.push(component);
                 }
             }
+        }
+
+        if (Layout._notifyChildrenChangedList.length > 0
+            || Layout._notifyCssPropertyChangedList.length > 0) {
+            requestAnimationFrame(HtmlAlign.RefreshLayout);
         }
     });
 
@@ -461,9 +494,9 @@ namespace HtmlAlign {
         observer.observe(document.body, { attributes: true, childList: true, subtree: true, characterData: true });
 
         // inicializa o verificador de update
-        _verifyStyleSheetWorker();
+        requestAnimationFrame(() => setTimeout(_verifyStyleSheetWorker, 2000));
 
-        window.addEventListener('resize', Debouncer(function () { Layout.RefreshRootSize(); }, Config.ResizeDelay));
+        window.addEventListener('resize', function () { Layout.RefreshRootSize(); });
     };
 
     if (document.readyState === "complete") {
@@ -475,7 +508,6 @@ namespace HtmlAlign {
 
     // configurações
     export const Config = {
-        ResizeDelay: 4,
         DevToolsTreshhold: 160,
         IfDevToolsOpenRefresh: true,
         DevToolsOpenRefreshDelay: 400,

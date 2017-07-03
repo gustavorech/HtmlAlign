@@ -18,9 +18,6 @@ namespace HtmlAlign {
         GetCssProperties(): ICssProperty[];
         Measure(): void;
         Arrange(): void;
-
-        OnInit?(): void;
-        OnDispose?(): void;
     }
 
     // Interface para as classes que representam grupos de valores, como se fossem

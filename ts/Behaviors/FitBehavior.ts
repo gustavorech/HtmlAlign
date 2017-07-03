@@ -134,10 +134,10 @@ namespace HtmlAlign {
 
             }
             else if (this.Fit == Fit.Horizontal) {
-                this.Component.Element.style.transform = "scale(" + uniformWidth + ",1)";
+                this.Component.Element.style.transform = "scale(" + uniformWidth + ")";
             }
             else if (this.Fit == Fit.Vertical) {
-                this.Component.Element.style.transform = "scale(1," + uniformHeight + ")";
+                this.Component.Element.style.transform = "scale(" + uniformHeight + ")";
             }
 
             // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização

@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>15 Alinhamentos</title>
+    <script type="text/javascript" src="https://rawgit.com/gustavorech/HtmlAlign/master/js/HtmlAlign.js"></script>
+
+    <script type="text/javascript">
+
+        //Create and add stylesheet to page.
+        var node = document.createElement("style");
+        document.head.appendChild(node);
+        var stylesheet =
+            document.styleSheets[document.styleSheets.length - 1];
+
+        for (var i = 0; i < 10; i++) {
+            stylesheet.insertRule("panel{--size:10;}", stylesheet.cssRules.length);
+        }
+
+        //document.head.removeChild(node);
+    </script>
+    <style type="text/css" id="style"></style>
+</head>
+<body>
+    <panel></panel>
+</body>
+</html>

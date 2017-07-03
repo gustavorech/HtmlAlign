@@ -5,6 +5,7 @@ var HtmlAlign;
     (function (CssPropertyContext) {
         CssPropertyContext[CssPropertyContext["Component"] = 1] = "Component";
         CssPropertyContext[CssPropertyContext["Child"] = 2] = "Child";
+        CssPropertyContext[CssPropertyContext["Oi"] = 3] = "Oi";
     })(CssPropertyContext = HtmlAlign.CssPropertyContext || (HtmlAlign.CssPropertyContext = {}));
     // Enum para definir os valores de visibilidade possíveis
     var Scroll;
@@ -207,27 +208,33 @@ var HtmlAlign;
             this.Visible = true;
             this.Scroll = HtmlAlign.Scroll.None;
             this.Align = HtmlAlign.Align.Start;
-            this.Size = HtmlAlign.SizeRange.Default();
-            this.Margin = HtmlAlign.Thickness.Default();
-            this.Border = HtmlAlign.Thickness.Default();
-            this.Padding = HtmlAlign.Thickness.Default();
+            this.Size = new HtmlAlign.SizeRange(0, 0, 0, false, 0, false);
+            this.Margin = new HtmlAlign.Thickness(0, 0);
+            this.Border = new HtmlAlign.Thickness(0, 0);
+            this.Padding = new HtmlAlign.Thickness(0, 0);
             this.IsComponentDelimiterChanged = false;
             this.IsComponentDesiredChanged = false;
             this.IsNeedMeasureAgain = false;
             this.IsComponentDisplacementChanged = false;
             this.IsComponentSizeChanged = false;
             this.IsComponentSpaceChanged = false;
-            this._givedDelimiter = HtmlAlign.SizeDelimiter.Default();
-            this._componentDelimiter = HtmlAlign.SizeDelimiter.Default();
-            this._contentDelimiter = HtmlAlign.SizeDelimiter.Default();
+            this._actualSize = 0;
+            this._actualDisplacement = 0;
+            this._givedDelimiter = new HtmlAlign.SizeDelimiter(0, 0);
+            this._componentDelimiter = new HtmlAlign.SizeDelimiter(0, 0);
+            this._contentDelimiter = new HtmlAlign.SizeDelimiter(0, 0);
             this._contentDesired = 0;
             this._componentDesired = 0;
             this._componentRequired = 0;
             this._savedComponentDesired = 0;
-            this._givedSpace = HtmlAlign.Space.Default();
-            this._componentSpace = HtmlAlign.Space.Default();
-            this._contentSpace = HtmlAlign.Space.Default();
+            this._givedSpace = new HtmlAlign.Space(0, 0);
+            this._componentSpace = new HtmlAlign.Space(0, 0);
+            this._contentSpace = new HtmlAlign.Space(0, 0);
         }
+        get ActualSize() { return this._actualSize; }
+        set ActualSize(value) { this._actualSize = value; }
+        get ActualDisplacement() { return this._actualDisplacement; }
+        set ActualDisplacement(value) { this._actualDisplacement = value; }
         get GivedDelimiter() { return this._givedDelimiter; }
         get ComponentDelimiter() { return this._componentDelimiter; }
         get ContentDelimiter() { return this._contentDelimiter; }
@@ -264,11 +271,16 @@ var HtmlAlign;
             }
             return this.Size.Star;
         }
+        get NeedLayout() {
+            return this._actualSize != this._componentSpace.Size
+                || this._actualDisplacement != this._componentSpace.Displacement;
+        }
         // passo 1: behavior informa a delimitação de tamanho
         // componente verifica qual sua delimitação e a do conteúdo
         set GivedDelimiter(value) {
             // inicialização
-            this._givedDelimiter.CopyFrom(value);
+            this._givedDelimiter.Min = value.Min;
+            this._givedDelimiter.Max = value.Max;
             // salva valores antigos para verificar mudança
             var lastComponentDelimiterMin = this._componentDelimiter.Min;
             var lastComponentDelimiterMax = this._componentDelimiter.Max;
@@ -327,12 +339,12 @@ var HtmlAlign;
             // tenta reduzir a probabilidade de um novo measure tornando o delimitador
             // mínimo igual ao máximo do delimitador passado
             // faz isso somente se o componente pai é um panel
-            //if (this.FatherIsPanel && this.Size.Star == 0
-            //    && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
-            //    && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == Align.Streach
-            //    && this._componentDelimiter.Min < this._givedDelimiter.Max) {
-            //    this._componentDelimiter.Min = this._givedDelimiter.Max;
-            //}
+            if (this.FatherIsPanel && this.Size.Star == 0
+                && this.GivedDelimiter.Max != Number.POSITIVE_INFINITY
+                && this.Size.Max == Number.POSITIVE_INFINITY && this.Align == HtmlAlign.Align.Streach
+                && this._componentDelimiter.Min < this._givedDelimiter.Max) {
+                this._componentDelimiter.Min = this._givedDelimiter.Max;
+            }
             // verifica qual a delimitação do conteúdo que é a delimitação do componente
             // menos seus espaçamentos e borda
             var totalSpacing = this.Margin.Sum() + this.Border.Sum() + this.Padding.Sum();
@@ -402,7 +414,8 @@ var HtmlAlign;
         // componente verifica qual o espaço para o conteúdo
         set GivedSpace(value) {
             // inicialização
-            this._givedSpace.CopyFrom(value);
+            this._givedSpace.Size = value.Size;
+            this._givedSpace.Displacement = value.Displacement;
             // salva valores antigos para verificar mudança
             var lastComponentSpaceDisplacement = this._componentSpace.Displacement;
             var lastComponentSpaceSize = this._componentSpace.Size;
@@ -499,6 +512,33 @@ var HtmlAlign;
             this.IsComponentSpaceChanged =
                 this.IsComponentDisplacementChanged || this.IsComponentSizeChanged;
         }
+        // passo 4: popular valores de layout
+        RefreshLayout(component, axis) {
+            if (axis == HtmlAlign.Axis.Horizontal) {
+                if (this._actualSize != this._componentSpace.Size) {
+                    this._actualSize = this._componentSpace.Size;
+                    this._actualSize = this._actualSize > 0 ? this._actualSize : 0;
+                    component.Element.style.setProperty("width", this._actualSize + "px");
+                }
+                if (this._actualDisplacement != this._componentSpace.Displacement) {
+                    this._actualDisplacement = this._componentSpace.Displacement;
+                    this._actualDisplacement = this._actualDisplacement > 0 ? this._actualDisplacement : 0;
+                    component.Element.style.setProperty("left", this._actualDisplacement + "px");
+                }
+            }
+            else {
+                if (this._actualSize != this._componentSpace.Size) {
+                    this._actualSize = this._componentSpace.Size;
+                    this._actualSize = this._actualSize > 0 ? this._actualSize : 0;
+                    component.Element.style.setProperty("height", this._actualSize + "px");
+                }
+                if (this._actualDisplacement != this._componentSpace.Displacement) {
+                    this._actualDisplacement = this._componentSpace.Displacement;
+                    this._actualDisplacement = this._actualDisplacement > 0 ? this._actualDisplacement : 0;
+                    component.Element.style.setProperty("top", this._actualDisplacement + "px");
+                }
+            }
+        }
     }
     HtmlAlign.Dimension = Dimension;
 })(HtmlAlign || (HtmlAlign = {}));
@@ -510,71 +550,83 @@ var HtmlAlign;
         constructor(Father, Element) {
             this.Father = Father;
             this.Element = Element;
-            this._isBehaviorChanged = false;
-            this._frozen = false;
+            this.Children = [];
             this.H = new HtmlAlign.Dimension();
             this.V = new HtmlAlign.Dimension();
-            this.Children = [];
             this.FatherAttached = {};
-            // atributos que armazenam modificações dos compnentes
-            // para futuro processamento
+            this._isBehaviorChanged = false;
+            this._frozen = false;
+            this._childrenChanged = false;
+            this._cssPropertiesChanged = false;
+            this._needArrange = false;
+            this._childNeedArrange = false;
             this._needMeasure = true;
-            this._needRefreshCssProperties = false;
-            this._characterDataChanged = false;
-            this._needArrange = true;
-            this._childNeedArrange = true;
-            this._addedElements = [];
-            this._removedElements = [];
-            this._changedCssProperties = [];
+            this._needLayout = false;
+            this._childNeedLayout = false;
             this._canInformNeedArrangeInMeasure = true;
+            this._hSizeDelimiter = new HtmlAlign.SizeDelimiter(0, 0);
+            this._vSizeDelimiter = new HtmlAlign.SizeDelimiter(0, 0);
             // componente lógico
-            if (this.Element == undefined) {
+            if (!this.Element) {
                 this.Behavior = new HtmlAlign.LogicalBehavior();
                 this.Behavior.Component = this;
             }
             else {
                 this.Element["component"] = this;
-                // informa que o elemento mudará o css quando o mouse estiver sobre ele
-                // [TODO] deverá ser modificado no futuro
-                if (this.Element.attributes["hover"] != null) {
-                    this.Element.addEventListener("mouseover", () => this.NotifyTagChanged());
-                    this.Element.addEventListener("mouseout", () => this.NotifyTagChanged());
-                }
-                // [TODO] deverá ser modificado no futuro
-                if (this.Element.style.getPropertyValue("transform")) {
-                    this.Element.style.removeProperty("transform");
-                    // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
-                    this.Element["laststyle"] = this.Element.getAttribute("style");
-                }
                 // realiza a primeira leitura das propriedades css
                 HtmlAlign.Layout.RefreshValuesFromCssProperties(this);
                 // precisa inicializar, realiza a leitura dos filhos
-                if (this.Behavior.Name != "in" && this.Element.hasChildNodes) {
+                if (this.Behavior.Name != "in") {
+                    //this.NotifyNeedCreateCssRule();
                     var element = this.Element.firstElementChild;
                     // itera sobre todos os elementos irmãos
-                    while (element != null) {
-                        if (HtmlAlign.Layout.IsBehavior(element)) {
-                            this.Children.push(new Component(this, element));
-                        }
-                        else if (element.attributes["in"] != null) {
+                    while (element) {
+                        if (HtmlAlign.Layout.IsBehavior(element)
+                            || element.attributes["in"] != null) {
                             this.Children.push(new Component(this, element));
                         }
                         element = element.nextElementSibling;
                     }
                 }
             }
-            if (this._behavior.OnInit) {
-                this._behavior.OnInit();
+        }
+        Get(axis) {
+            if (axis == HtmlAlign.Axis.Horizontal) {
+                return this.H;
+            }
+            else {
+                return this.V;
             }
         }
-        get IsContent() {
-            return this._isContent;
+        GetAwry(axis) {
+            if (axis == HtmlAlign.Axis.Vertical) {
+                return this.H;
+            }
+            else {
+                return this.V;
+            }
+        }
+        Set(axis, value) {
+            if (axis == HtmlAlign.Axis.Horizontal) {
+                this.H = value;
+            }
+            else {
+                this.V = value;
+            }
+        }
+        SetAwry(axis, value) {
+            if (axis == HtmlAlign.Axis.Vertical) {
+                this.H = value;
+            }
+            else {
+                this.V = value;
+            }
         }
         get Behavior() {
             return this._behavior;
         }
         set Behavior(value) {
-            // [TODO] modificar isso no futuro
+            // [TODO] temporário, precisa melhorar
             if (!value) {
                 if (!this._behavior) {
                     value = new HtmlAlign.PanelBehavior();
@@ -584,8 +636,9 @@ var HtmlAlign;
                 }
             }
             if (this._behavior && this._behavior.Name != value.Name) {
-                if (this._behavior.OnDispose) {
-                    this._behavior.OnDispose();
+                // [TODO] [FIT] temporário, precisa melhorar
+                if (this._behavior.Name == "fit") {
+                    this.Element.style.removeProperty("transform");
                 }
                 this._isBehaviorChanged = true;
             }
@@ -635,235 +688,138 @@ var HtmlAlign;
         }
         Unfrozen() {
             this._frozen = false;
-            this.NotifyTagChanged();
+            this.NotifyCssPropertiesChanged();
             HtmlAlign.RefreshLayout();
-        }
-        Get(axis) {
-            if (axis == HtmlAlign.Axis.Horizontal) {
-                return this.H;
-            }
-            else {
-                return this.V;
-            }
-        }
-        GetAwry(axis) {
-            if (axis == HtmlAlign.Axis.Vertical) {
-                return this.H;
-            }
-            else {
-                return this.V;
-            }
-        }
-        Set(axis, value) {
-            if (axis == HtmlAlign.Axis.Horizontal) {
-                this.H = value;
-            }
-            else {
-                this.V = value;
-            }
-        }
-        SetAwry(axis, value) {
-            if (axis == HtmlAlign.Axis.Vertical) {
-                this.H = value;
-            }
-            else {
-                this.V = value;
-            }
-        }
-        get NeedArrange() {
-            return this._needArrange || this._childNeedArrange;
-        }
-        // notificações para informar que o componente modificou e precisará de
-        // uma nova medida. Essa notificação terá que ir até o componente raiz
-        NotifyNeedMeasure() {
-            // componentes congelados não sofrem alterações
-            // cancela o gatilho de aviso de alteração
-            if (this._frozen) {
-                return;
-            }
-            if (!this._needMeasure) {
-                this._needMeasure = true;
-                this.Father.NotifyNeedMeasure();
-            }
-            else {
-                this._needMeasure = true;
-            }
-        }
-        NotifyTagChanged() {
-            this._needRefreshCssProperties = true;
-            this.NotifyNeedMeasure();
-        }
-        NotifyAdded(element) {
-            // se for um conteúdo, apenas notifica que houve uma modificação
-            if (this._isContent) {
-                this.NotifyTagChanged();
-                return;
-            }
-            // necessário pois o DOM pode não ter se montado corretamente ainda
-            setTimeout(() => {
-                // o filho adicionado tem que ser um behavior um um conteúdo
-                // e esse componente não pode ser um conteúdo
-                if (HtmlAlign.Layout.IsBehavior(element)) {
-                    this._addedElements.push(element);
-                    HtmlAlign.Log.AddedElements++;
-                }
-                // se o componente não está visivel deixa pra depois o processamento dos filhos
-                if (this.Visible) {
-                    this.NotifyNeedMeasure();
-                }
-            }, 16);
-        }
-        NotifyRemoved(element) {
-            // se for um conteúdo, apenas notifica que houve uma modificação
-            if (this._isContent) {
-                this.NotifyTagChanged();
-                return;
-            }
-            // o filho adicionado tem que ser um behavior um um conteúdo
-            // e esse componente não pode ser um conteúdo
-            if (HtmlAlign.Layout.IsBehavior(element)) {
-                this._removedElements.push(element);
-                HtmlAlign.Log.RemovedElements++;
-            }
-            // se o componente não está visivel deixa pra depois o processamento dos filhos
-            if (this.Visible) {
-                this.NotifyNeedMeasure();
-            }
         }
         NotifyCssPropertyChanged(cssProperty) {
             this.Element.style.setProperty(cssProperty.Name, cssProperty.GetValueStringFromComponent(this));
             this.NotifyNeedMeasure();
         }
-        // notificações para informar que o componente modificou e precisará
-        // de um novo arranjo
-        NotifyToRefreshArrange() {
-            this._needArrange = true;
-            this.NotifyArrange();
-        }
-        NotifyArrange() {
-            if (!this._childNeedArrange) {
-                this._childNeedArrange = true;
-                this.Father.NotifyArrange();
-            }
-            else {
-                this._childNeedArrange = true;
-            }
-        }
         SetCssPropertyValue(cssProperty) {
             this.Element.style.setProperty(cssProperty.Name, cssProperty.GetValueStringFromComponent(this));
         }
-        // Valores do atributo size
-        get Width() {
-            return {
-                width: this.H.Size.Min,
-                star: this.H.Size.Star,
-                min: this.H.Size.Min,
-                max: this.H.Size.Max
-            };
-        }
-        set Width(value) {
-            if (typeof value === "number") {
-                this.H.Size.Star = 0;
-                this.H.Size.Min = value;
-                this.H.Size.Max = value;
+        NotifyChildrenChanged() {
+            if (this._isBehavior || this._isRoot) {
+                this._childrenChanged = true;
+                this.NotifyNeedMeasure();
             }
-            else if (typeof value === "object") {
-                if (value.star !== undefined) {
-                    this.H.Size.Star = value.star;
+            else {
+                this.NotifyCssPropertiesChanged();
+            }
+        }
+        NotifyCssPropertiesChanged() {
+            this._cssPropertiesChanged = true;
+            this.NotifyNeedMeasure();
+        }
+        NotifyNeedMeasure() {
+            if (!this._needMeasure) {
+                this._needMeasure = true;
+                this.Father.NotifyNeedMeasure();
+            }
+        }
+        NotifyNeedArrange() {
+            this._needArrange = true;
+            this.Father.NotifyChildNeedArrange();
+        }
+        NotifyChildNeedArrange() {
+            if (!this._childNeedArrange) {
+                this._childNeedArrange = true;
+                this.Father.NotifyChildNeedArrange();
+            }
+        }
+        NotifyNeedLayout() {
+            this._needLayout = true;
+            this.Father.NotifyChildNeedLayout();
+        }
+        NotifyChildNeedLayout() {
+            if (!this._childNeedLayout) {
+                this._childNeedLayout = true;
+                this.Father.NotifyChildNeedLayout();
+            }
+        }
+        ProcessChangeChildren() {
+            if (this._isBehavior || this._isRoot) {
+                var element = this.Element.firstElementChild;
+                if (!element && this.Children.length > 0) {
+                    this.Children = [];
                 }
-                else if (value.width !== undefined) {
-                    this.H.Size.Star = 0;
-                    this.H.Size.Min = value.width;
-                    this.H.Size.Max = value.width;
+                else if (element && this.Children.length == 0) {
+                    // itera sobre todos os elementos irmãos
+                    while (element) {
+                        if (HtmlAlign.Layout.IsBehavior(element)
+                            || element.attributes["in"] != null) {
+                            this.Children.push(new Component(this, element));
+                        }
+                        element = element.nextElementSibling;
+                    }
                 }
                 else {
-                    if (value.min !== undefined) {
-                        this.H.Size.Star = 0;
-                        this.H.Size.Min = value.min;
-                    }
-                    if (value.max !== undefined) {
-                        this.H.Size.Star = 0;
-                        this.H.Size.Max = value.max;
-                    }
-                    if (this.H.Size.Min > this.H.Size.Max) {
-                        this.H.Size.Max = this.H.Size.Min;
+                    var childPosition = 0;
+                    var child = this.Children[childPosition];
+                    // itera sobre todos os elementos irmãos
+                    while (element) {
+                        if (HtmlAlign.Layout.IsBehavior(element)
+                            || element.attributes["in"] != null) {
+                            if (childPosition == this.Children.length) {
+                                this.Children.push(new Component(this, element));
+                                childPosition++;
+                            }
+                            else {
+                                var comp = element["component"];
+                                if (comp) {
+                                    while (comp != child && childPosition < this.Children.length) {
+                                        // [TODO] [FIT] temporário, precisa melhorar
+                                        if (comp._behavior.Name == "fit") {
+                                            this.Element.style.removeProperty("transform");
+                                        }
+                                        this.Children.splice(childPosition, 1);
+                                        child = this.Children[childPosition];
+                                    }
+                                    if (childPosition < this.Children.length) {
+                                        childPosition++;
+                                        child = this.Children[childPosition];
+                                    }
+                                }
+                                else {
+                                    this.Children.splice(childPosition, 0, new Component(this, element));
+                                    childPosition++;
+                                }
+                            }
+                        }
+                        element = element.nextElementSibling;
                     }
                 }
-                this.NotifyCssPropertyChanged(HtmlAlign.PanelBehavior.SizeCssProperty);
+                this.NotifyNeedArrange();
+                this.Father.NotifyNeedArrange();
             }
+            this._childrenChanged = false;
         }
-        get Height() {
-            return {
-                height: this.V.Size.Min,
-                star: this.V.Size.Star,
-                min: this.V.Size.Min,
-                max: this.V.Size.Max
-            };
-        }
-        set Height(value) {
-            if (typeof value === "number") {
-                this.V.Size.Star = 0;
-                this.V.Size.Min = value;
-                this.V.Size.Max = value;
-            }
-            else if (typeof value === "object") {
-                if (value.star !== undefined) {
-                    this.V.Size.Star = value.star;
+        ProcessCssPropertiesChanged() {
+            HtmlAlign.Layout.RefreshValuesFromCssProperties(this);
+            //this.NotifyNeedMeasure();
+            this.NotifyNeedArrange();
+            this.Father.NotifyNeedArrange();
+            // se o behavior modificou durante a leitura será necessário
+            // ler novamente as propriedades e notificar os filhos para fazer o mesmo
+            if (this._isBehaviorChanged) {
+                this._isBehaviorChanged = false;
+                HtmlAlign.Layout.RefreshValuesFromCssProperties(this);
+                for (var index = 0; index < this.Children.length; index++) {
+                    this.Children[index].NotifyCssPropertiesChanged();
                 }
-                else if (value.height !== undefined) {
-                    this.V.Size.Star = 0;
-                    this.V.Size.Min = value.height;
-                    this.V.Size.Max = value.height;
-                }
-                else {
-                    if (value.min !== undefined) {
-                        this.V.Size.Star = 0;
-                        this.V.Size.Min = value.min;
-                    }
-                    if (value.max !== undefined) {
-                        this.V.Size.Star = 0;
-                        this.V.Size.Max = value.max;
-                    }
-                    if (this.V.Size.Min > this.V.Size.Max) {
-                        this.V.Size.Max = this.V.Size.Min;
-                    }
-                }
-                this.NotifyCssPropertyChanged(HtmlAlign.PanelBehavior.SizeCssProperty);
             }
-        }
-        PropagateRemovedComponent(component) {
-            if (component._behavior.OnDispose) {
-                component._behavior.OnDispose();
-            }
-            component.Element["component"] = undefined;
-            for (var index = 0; index < component.Children.length; index++) {
-                this.PropagateRemovedComponent(component.Children[index]);
-            }
+            this._cssPropertiesChanged = false;
         }
         Measure(h, v) {
             // componentes congelados não sofrem alterações
-            if (this._frozen) {
+            if (this._frozen || !this.Visible) {
                 return;
             }
-            // processa a atualização das propriedades css do componente
-            if (this._needRefreshCssProperties) {
-                this._needRefreshCssProperties = false;
-                HtmlAlign.Layout.RefreshValuesFromCssProperties(this);
-                // se o behavior modificou durante a leitura será necessário
-                // ler novamente as propriedades e notificar os filhos para fazer o mesmo
-                if (this._isBehaviorChanged) {
-                    this._isBehaviorChanged = false;
-                    HtmlAlign.Layout.RefreshValuesFromCssProperties(this);
-                    if (this._behavior.OnInit) {
-                        this._behavior.OnInit();
-                    }
-                    for (var index = 0; index < this.Children.length; index++) {
-                        this.Children[index].NotifyTagChanged();
-                    }
-                }
-                // necessitará rearranjar os filhos e notificar o pai
-                this._needArrange = true;
-                this.Father.NotifyToRefreshArrange();
+            if (this._childrenChanged) {
+                this.ProcessChangeChildren();
+            }
+            if (this._cssPropertiesChanged) {
+                this.ProcessCssPropertiesChanged();
             }
             this.H.GivedDelimiter = h;
             this.V.GivedDelimiter = v;
@@ -872,114 +828,22 @@ var HtmlAlign;
                 && !this.V.IsComponentDelimiterChanged) {
                 return;
             }
-            // processamento de adição e remoção de filhos
-            if (this._isBehavior || this._isRoot) {
-                // processa a remoção de elementos
-                var removedElementsLength = this._removedElements.length;
-                if (removedElementsLength > 0) {
-                    // varre a lista de elementos removidos
-                    for (var index = 0; index < removedElementsLength; index++) {
-                        var element = this._removedElements[index];
-                        var component = element["component"];
-                        if (component != undefined) {
-                            var index = this.Children.indexOf(component);
-                            if (index > -1) {
-                                this.Children.splice(index, 1);
-                            }
-                            this.PropagateRemovedComponent(component);
-                        }
-                    } // fecha a iterção pelos elementos removidos
-                    // apenas elimina os já processados, pode ser que outros elementos foram
-                    // adicionados enquando esse processo ocorria
-                    this._removedElements.splice(0, removedElementsLength);
-                    // necessitará rearranjar os filhos e notificar o pai
-                    this._needArrange = true;
-                    this.Father.NotifyToRefreshArrange();
-                } // fecha o processo de remoção de elementos
-                // processa a adição de elementos
-                var addedElementsLength = this._addedElements.length;
-                if (addedElementsLength > 0) {
-                    // busca o último elemento adicionado e o primeiro para auxiliar
-                    var lastElement = this.Element;
-                    var firstElement = this.Element;
-                    if (this.Children.length > 0) {
-                        lastElement = this.Children[this.Children.length - 1].Element;
-                        firstElement = this.Children[0].Element;
-                    }
-                    // varre a lista de elementos adicionados
-                    for (var index = 0; index < addedElementsLength; index++) {
-                        var element = this._addedElements[index];
-                        if (element["component"] != undefined) {
-                            continue;
-                        }
-                        // se o elemento novo será o ultimo da lista apenas adiciona no final
-                        if (lastElement.nextElementSibling == element || this.Children.length == 0) {
-                            if (HtmlAlign.Layout.IsBehavior(element)) {
-                                this.Children.push(new Component(this, element));
-                            }
-                            // atualiza o último elemento para a próxima iteração
-                            lastElement = element;
-                        }
-                        else if (firstElement.previousElementSibling == element) {
-                            if (HtmlAlign.Layout.IsBehavior(element)) {
-                                this.Children.splice(0, 0, new Component(this, element));
-                            }
-                            firstElement = element;
-                        }
-                        else {
-                            // não há mais como garantir o auxílio
-                            lastElement = this.Element;
-                            firstElement = this.Element;
-                            var elementSibling = this.Element.firstElementChild;
-                            if (elementSibling.previousElementSibling == element) {
-                                if (HtmlAlign.Layout.IsBehavior(element)) {
-                                    this.Children.splice(0, 0, new Component(this, element));
-                                }
-                            }
-                            else {
-                                var indexComp = 0;
-                                // itera desde o primeiro filho procurando pelo elemento
-                                // para saber em qual posição dentro os filhos esse elemento vai ocupar
-                                // a cada vez que encontrar um componente incrementa um contador
-                                while (elementSibling != undefined) {
-                                    if (elementSibling["component"] != undefined) {
-                                        indexComp++;
-                                    }
-                                    if (elementSibling.nextElementSibling == element) {
-                                        if (HtmlAlign.Layout.IsBehavior(element)) {
-                                            this.Children.splice(indexComp, 0, new Component(this, element));
-                                        }
-                                        break;
-                                    }
-                                    elementSibling = elementSibling.nextElementSibling;
-                                } // fecha o while que percorre todos os filhos
-                            } // fecha o if que verifica se é o primeiro elemento
-                        } // fecha o if que verifica pelo último elemento
-                    } // fecha a iterção pelos elementos adicionados
-                    // apenas elimina os já processados, pode ser que outros elementos foram
-                    // adicionados enquando esse processo ocorria
-                    this._addedElements.splice(0, addedElementsLength);
-                    // necessitará rearranjar os filhos e notificar o pai
-                    this._needArrange = true;
-                    this.Father.NotifyToRefreshArrange();
-                } // fecha o processo de adição filhos
-            } // fecha a verificação se é do tipo behavior
-            // não há porque atualizar componentes sem visibilidade e que não afetam o layout
-            if (!this.Visible) {
-                return;
-            }
             this._behavior.Measure();
             // se o tamanho desejado pelo componente foi modificado ele precisará arranjar novamente os filhos
             // se a delimitação de tamanho foi modificada pelo componente pai e esse componte tem tamanho relativo
             // ao componente pai ele precisará ser rearranjado
             if (this._canInformNeedArrangeInMeasure && (this.H.NeedArrange || this.V.NeedArrange)) {
-                this._needArrange = true;
-                this.Father.NotifyToRefreshArrange();
+                this.NotifyNeedArrange();
+                this.Father.NotifyNeedArrange();
             }
             this._needMeasure = false;
             HtmlAlign.Log.Measures++;
         }
         Arrange() {
+            // componentes congelados não sofrem alterações
+            if (this._frozen) {
+                return;
+            }
             // não há porque atualizar componentes sem visibilidade e que não afetam o layout
             // componentes congelados não sofrem alterações
             if (!this.Visible || this._frozen) {
@@ -992,7 +856,14 @@ var HtmlAlign;
                     this._canInformNeedArrangeInMeasure = false;
                     this.H.IsNeedMeasureAgain = false;
                     this.V.IsNeedMeasureAgain = false;
-                    this.Measure(new HtmlAlign.SizeDelimiter(this.H.GivedSpace.Size, this.H.GivedSpace.Size), new HtmlAlign.SizeDelimiter(this.V.GivedSpace.Size, this.V.GivedSpace.Size));
+                    this._hSizeDelimiter.Min = this._hSizeDelimiter.Max = this.H.GivedSpace.Size;
+                    this._vSizeDelimiter.Min = this._vSizeDelimiter.Max = this.V.GivedSpace.Size;
+                    this.H.GivedDelimiter = this._hSizeDelimiter;
+                    this.V.GivedDelimiter = this._vSizeDelimiter;
+                    // verifica se precisa de uma nova medida
+                    if (this.H.IsComponentDelimiterChanged || this.V.IsComponentDelimiterChanged) {
+                        this._behavior.Measure();
+                    }
                     this._canInformNeedArrangeInMeasure = true;
                     HtmlAlign.Log.BehaviorMeasureAgain++;
                 }
@@ -1000,40 +871,36 @@ var HtmlAlign;
                 HtmlAlign.Log.BehaviorArranges++;
             }
             else if (this._childNeedArrange) {
-                // temporário, precisa melhorar
+                // [TODO] [FIT] temporário, precisa melhorar
                 if (this._behavior.Name == "fit") {
                     this._behavior.Arrange();
                 }
                 else {
                     for (var index = 0; index < this.Children.length; index++) {
-                        var child = this.Children[index];
-                        if (child.NeedArrange) {
-                            this.Children[index].Arrange();
-                        }
+                        this.Children[index].Arrange();
                     }
                 }
             }
-            // se o espaço determinado para o componente foi modificado ele precisará
-            // atualizar o layout
-            if (!this._behavior.IsLayoutOverridedInArrange) {
-                var width = this.H.ComponentSpace.Size;
-                var height = this.V.ComponentSpace.Size;
-                if (width < 0) {
-                    width = 0;
-                }
-                if (height < 0) {
-                    height = 0;
-                }
-                this.Element.style.width = width + "px";
-                this.Element.style.height = height + "px";
-                this.Element.style.left = this.H.ComponentSpace.Displacement + "px";
-                this.Element.style.top = this.V.ComponentSpace.Displacement + "px";
-                // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
-                this.Element["laststyle"] = this.Element.getAttribute("style");
-            }
             this._needArrange = false;
             this._childNeedArrange = false;
-            HtmlAlign.Log.Arranges++;
+            if (!this._behavior.IsLayoutOverridedInArrange && (this.H.NeedLayout || this.V.NeedLayout)) {
+                this._needLayout = true;
+                this.Father.NotifyChildNeedLayout();
+            }
+        }
+        ProcessLayout() {
+            if (this._needLayout) {
+                this.H.RefreshLayout(this, HtmlAlign.Axis.Horizontal);
+                this.V.RefreshLayout(this, HtmlAlign.Axis.Vertical);
+                this.Element["laststyle"] = this.Element.getAttribute("style");
+                this._needLayout = false;
+            }
+            if (this._childNeedLayout) {
+                for (var i = 0; i < this.Children.length; i++) {
+                    this.Children[i].ProcessLayout();
+                }
+                this._childNeedLayout = false;
+            }
         }
     }
     HtmlAlign.Component = Component;
@@ -1191,70 +1058,6 @@ var HtmlAlign;
         }
     }
     HtmlAlign.SizeCssProperty = SizeCssProperty;
-    class CascadeUpdateCssProperty {
-        constructor() {
-            this.cascadeExpAlign = /^\s*(none|all|\d*).*$/;
-            this.Name = "--cascade";
-            this.Context = HtmlAlign.CssPropertyContext.Component;
-        }
-        DefaultValue() {
-            return "none";
-        }
-        SetValueFromCssProperty(valueString, component) {
-            var matchsCascade = this.cascadeExpAlign.exec(valueString);
-            var cascade = matchsCascade[1];
-            if (!cascade || cascade == "none") {
-                component.CascadeUpdateLength = 0;
-            }
-            else if (cascade == "all") {
-                component.CascadeUpdateLength = Number.POSITIVE_INFINITY;
-            }
-            else {
-                component.CascadeUpdateLength = Number.parseInt(cascade) || 0;
-            }
-        }
-        GetValueStringFromComponent(component) {
-            if (component.CascadeUpdateLength == 0) {
-                return "none";
-            }
-            else if (component.CascadeUpdateLength == Number.POSITIVE_INFINITY) {
-                return "all";
-            }
-            else {
-                return component.CascadeUpdateLength.toString();
-            }
-        }
-    }
-    HtmlAlign.CascadeUpdateCssProperty = CascadeUpdateCssProperty;
-    class HoverCssProperty {
-        constructor() {
-            this.hoverExpAlign = /^\s*(none|refresh).*$/;
-            this.Name = "--hover";
-            this.Context = HtmlAlign.CssPropertyContext.Component;
-        }
-        DefaultValue() {
-            return "none";
-        }
-        SetValueFromCssProperty(valueString, component) {
-            var matchsHover = this.hoverExpAlign.exec(valueString);
-            var hover = matchsHover[1];
-            if (!hover || hover == "none") {
-                component.UpdateOnHover = false;
-            }
-            else {
-                component.UpdateOnHover = true;
-            }
-        }
-        GetValueStringFromComponent(component) {
-            if (!component.UpdateOnHover) {
-                return "none";
-            }
-            else {
-                return "update";
-            }
-        }
-    }
-    HtmlAlign.HoverCssProperty = HoverCssProperty;
     class DisplayCssProperty {
         constructor() {
             this.Name = "display";
@@ -1281,14 +1084,14 @@ var HtmlAlign;
         }
     }
     HtmlAlign.DisplayCssProperty = DisplayCssProperty;
-    class ScrollCssProperty {
+    class OverflowCssProperty {
         constructor() {
             this.regExpScroll = /^\s*(auto|overlay|hidden|scroll|visible){0,1}\s*(auto|overlay|hidden|scroll|visible){0,1}.*$/;
             this.Name = "overflow";
             this.Context = HtmlAlign.CssPropertyContext.Component;
         }
         DefaultValue() {
-            return "hidden";
+            return "visible";
         }
         SetValueFromCssProperty(valueString, component) {
             var matchsAlign = this.regExpScroll.exec(valueString);
@@ -1314,15 +1117,10 @@ var HtmlAlign;
             }
         }
         GetValueStringFromComponent(component) {
-            if (component.Visible) {
-                return "block";
-            }
-            else {
-                return "none";
-            }
+            return "";
         }
     }
-    HtmlAlign.ScrollCssProperty = ScrollCssProperty;
+    HtmlAlign.OverflowCssProperty = OverflowCssProperty;
     class MarginLeftCssProperty {
         constructor() {
             this.Name = "margin-left";
@@ -1526,7 +1324,7 @@ var HtmlAlign;
         GetCssProperties() {
             return [PanelBehavior.BehaviorCssProperty, PanelBehavior.AlignCssProperty,
                 PanelBehavior.SizeCssProperty, PanelBehavior.DisplayCssProperty,
-                PanelBehavior.ScrollCssProperty, PanelBehavior.MarginLeftCssProperty,
+                PanelBehavior.OverflowCssProperty, PanelBehavior.MarginLeftCssProperty,
                 PanelBehavior.MarginTopCssProperty, PanelBehavior.MarginRightCssProperty,
                 PanelBehavior.MarginBottomCssProperty, PanelBehavior.BorderLeftCssProperty,
                 PanelBehavior.BorderTopCssProperty, PanelBehavior.BorderRightCssProperty,
@@ -1563,7 +1361,7 @@ var HtmlAlign;
     PanelBehavior.AlignCssProperty = new AlignCssProperty();
     PanelBehavior.SizeCssProperty = new SizeCssProperty();
     PanelBehavior.DisplayCssProperty = new DisplayCssProperty();
-    PanelBehavior.ScrollCssProperty = new ScrollCssProperty();
+    PanelBehavior.OverflowCssProperty = new OverflowCssProperty();
     PanelBehavior.MarginLeftCssProperty = new MarginLeftCssProperty();
     PanelBehavior.MarginTopCssProperty = new MarginTopCssProperty();
     PanelBehavior.MarginRightCssProperty = new MarginRightCssProperty();
@@ -1609,22 +1407,22 @@ var HtmlAlign;
                 // se modificar as propriedades abaixo na primeria medida o tempo é muito alto
                 if (!this._widthIsMaxContent) {
                     this._widthIsMaxContent = true;
-                    this.Component.Element.style.width = HtmlAlign.Layout.MaxContentString;
+                    this.Component.Element.style.removeProperty("width");
                     this._needInformLastStyle = true;
                 }
                 if (!this._heightIsMaxContent) {
                     this._heightIsMaxContent = true;
-                    this.Component.Element.style.height = HtmlAlign.Layout.MaxContentString;
+                    this.Component.Element.style.removeProperty("height");
                     this._needInformLastStyle = true;
                 }
                 var maxHorizontal = this.Component.H.GivedDelimiter.Max - this.Component.H.Margin.Sum();
                 // maior ou igual porque o clientWidth só informa a parte inteira do número
                 if (this.Component.Element.clientWidth >= maxHorizontal) {
-                    this.Component.Element.style.width = maxHorizontal + "px";
+                    this.Component.Element.style.setProperty("width", maxHorizontal + "px");
                     this._widthIsMaxContent = false;
                     if (!this._heightIsMaxContent) {
                         this._heightIsMaxContent = true;
-                        this.Component.Element.style.height = HtmlAlign.Layout.MaxContentString;
+                        this.Component.Element.style.removeProperty("height");
                     }
                     this._needInformLastStyle = true;
                 }
@@ -1634,56 +1432,34 @@ var HtmlAlign;
                     this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");
                 }
                 var rect = this.Component.Element.getBoundingClientRect();
-                this.Component.H.ContentDesired = rect.width - this.Component.H.Border.Sum() - this.Component.H.Padding.Sum();
-                this.Component.V.ContentDesired = rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
+                this.Component.H.ActualSize = this.Component.H.ContentDesired =
+                    rect.width - this.Component.H.Border.Sum() - this.Component.H.Padding.Sum();
+                this.Component.V.ActualSize = this.Component.V.ContentDesired =
+                    rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
             }
         }
         Arrange() {
+            var needRefreshLayout = false;
             if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
                 this.Component.H.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.H.GivedSpace.Size, this.Component.H.GivedSpace.Size);
                 this.Component.V.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.V.GivedSpace.Size, this.Component.V.GivedSpace.Size);
                 this.Measure();
-                if (this.Component.H.ComponentSpace.Size > this.Component.H.GivedSpace.Size
-                    || this.Component.H.ComponentDesired < this.Component.H.ComponentSpace.Size
-                    || !this._widthIsMaxContent) {
+                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
                     this._widthIsMaxContent = false;
-                    var width = this.Component.H.ComponentSpace.Size;
-                    if (width < 0) {
-                        width = 0;
-                    }
-                    this.Component.Element.style.width = width + "px";
+                }
+                else {
+                    this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
                 }
             }
-            if (this.Component.V.ComponentSpace.Size > this.Component.V.GivedSpace.Size
-                || this.Component.V.ComponentDesired < this.Component.V.ComponentSpace.Size
-                || !this._heightIsMaxContent) {
+            if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
                 this._heightIsMaxContent = false;
-                var height = this.Component.V.ComponentSpace.Size;
-                if (height < 0) {
-                    height = 0;
-                }
-                this.Component.Element.style.height = height + "px";
             }
-            //if (!this._widthIsMaxContent || this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
-            //    this._widthIsMaxContent = false;
-            //    var width = this.Component.H.ComponentSpace.Size;
-            //    if (width < 0) {
-            //        width = 0;
-            //    }
-            //    this.Component.Element.style.width = width + "px";
-            //}
-            //if (!this._heightIsMaxContent || this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
-            //    this._heightIsMaxContent = false;
-            //    var height = this.Component.V.ComponentSpace.Size;
-            //    if (height < 0) {
-            //        height = 0;
-            //    }
-            //    this.Component.Element.style.height = height + "px";
-            //}
-            this.Component.Element.style.left = this.Component.H.ComponentSpace.Displacement + "px";
-            this.Component.Element.style.top = this.Component.V.ComponentSpace.Displacement + "px";
-            // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
-            this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");
+            else {
+                this.Component.V.ActualSize = this.Component.V.ComponentSpace.Size;
+            }
+            if (this.Component.H.NeedLayout || this.Component.V.NeedLayout) {
+                this.Component.NotifyNeedLayout();
+            }
         }
     }
     HtmlAlign.InBehavior = InBehavior;
@@ -2086,7 +1862,7 @@ var HtmlAlign;
             var sizeInReverseAxis = component.GetAwry(this.WrapAxis).ComponentRequired;
             // Se a adição do componente a essa linha faz com que o tamanho extrapole
             // o tamanho máximo esse componente não será inserido nessa linha
-            if ((this.SumOfSizesInAxis + sizeInAxis) > this.MaxSizeInAxis) {
+            if (Math.fround((this.SumOfSizesInAxis + sizeInAxis)) > Math.fround(this.MaxSizeInAxis)) {
                 return false;
             }
             this.SumOfSizesInAxis += sizeInAxis;
@@ -2568,10 +2344,10 @@ var HtmlAlign;
                 this.Component.Element.style.transform = "scale(" + uniformWidth + "," + uniformHeight + ")";
             }
             else if (this.Fit == HtmlAlign.Fit.Horizontal) {
-                this.Component.Element.style.transform = "scale(" + uniformWidth + ",1)";
+                this.Component.Element.style.transform = "scale(" + uniformWidth + ")";
             }
             else if (this.Fit == HtmlAlign.Fit.Vertical) {
-                this.Component.Element.style.transform = "scale(1," + uniformHeight + ")";
+                this.Component.Element.style.transform = "scale(" + uniformHeight + ")";
             }
             // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
             this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");
@@ -2585,8 +2361,6 @@ var HtmlAlign;
     FitBehavior.FitCssProperty = new FitCssProperty();
     HtmlAlign.FitBehavior = FitBehavior;
 })(HtmlAlign || (HtmlAlign = {}));
-// [TODO] : para componentes não panel, se misturar porcentagens e valores fixos podem haver problemas
-// criar um sistema de medida que adereça esses problemas
 /// <reference path='Component.ts'/>
 /// <reference path='Behaviors/PanelBehavior.ts' />
 /// <reference path='Behaviors/InBehavior.ts' />
@@ -2598,8 +2372,6 @@ var HtmlAlign;
 /// <reference path='Behaviors/GridBehavior.ts' />
 /// <reference path='Behaviors/FitBehavior.ts' />
 var HtmlAlign;
-// [TODO] : para componentes não panel, se misturar porcentagens e valores fixos podem haver problemas
-// criar um sistema de medida que adereça esses problemas
 /// <reference path='Component.ts'/>
 /// <reference path='Behaviors/PanelBehavior.ts' />
 /// <reference path='Behaviors/InBehavior.ts' />
@@ -2621,6 +2393,9 @@ var HtmlAlign;
         constructor() {
             this._behaviors = [];
             this._cssPropertyEntry = [];
+            this._notifyChildrenChangedList = [];
+            this._notifyCssPropertyChangedList = [];
+            this._cancelNextRefreshByMeasure = false;
             this.MaxContentString = "max-content";
             if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
                 this.MaxContentString = "-moz-max-content";
@@ -2634,6 +2409,20 @@ var HtmlAlign;
             this.RegisterBehavior(new HtmlAlign.GridBehavior());
             this.RegisterBehavior(new HtmlAlign.FitBehavior());
             this.RefreshBaseStyle();
+        }
+        _processoChanges() {
+            this._cancelNextRefreshByMeasure = true;
+            var _qtdChildrenChanged = this._notifyChildrenChangedList.length;
+            var _qtdCssPropertiesChanged = this._notifyCssPropertyChangedList.length;
+            for (var i = 0; i < _qtdChildrenChanged; i++) {
+                this._notifyChildrenChangedList[i].NotifyChildrenChanged();
+            }
+            for (var i = 0; i < _qtdCssPropertiesChanged; i++) {
+                this._notifyCssPropertyChangedList[i].NotifyChildrenChanged();
+            }
+            this._notifyChildrenChangedList.splice(0, _qtdChildrenChanged);
+            this._notifyCssPropertyChangedList.splice(0, _qtdCssPropertiesChanged);
+            this._cancelNextRefreshByMeasure = false;
         }
         RefreshBaseStyle() {
             var cssList = [];
@@ -2685,7 +2474,6 @@ var HtmlAlign;
                 document.head.removeChild(this._baseStyleElement);
             }
             this._baseStyleElement = document.createElement("style");
-            this._baseStyleElement.title = "text/css";
             this._baseStyleElement.appendChild(document.createTextNode(cssList.join("\n")));
             if (document.head.firstChild != undefined) {
                 document.head.insertBefore(this._baseStyleElement, document.head.firstChild);
@@ -2698,27 +2486,38 @@ var HtmlAlign;
             }
         }
         Init() {
+            var hSize = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var vSize = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             // inicializa o componente raiz
             // adiciona um componente pai ao componente raiz
             // esse componente será o finalizador da propagação de notificação de atualização
             var rootFather = { Behavior: {} };
             rootFather.NotifyNeedMeasure = function () {
-                HtmlAlign.RefreshLayout();
                 HtmlAlign.Log.RootMeasuresNotified++;
+                if (this._cancelNextRefreshByMeasure) {
+                    this._cancelNextRefreshByMeasure = false;
+                }
+                else {
+                    setTimeout(HtmlAlign.RefreshLayout, 4);
+                }
             };
-            rootFather.NotifyToRefreshArrange = function () { HtmlAlign.Log.RootArrangesNotified++; };
-            rootFather.NotifyArrange = function () { HtmlAlign.Log.RootArrangesNotified++; };
+            rootFather.NotifyNeedArrange =
+                rootFather.NotifyChildNeedArrange = function () { HtmlAlign.Log.RootArrangesNotified++; };
+            rootFather.NotifyChildNeedLayout = function () { };
             this._root = new HtmlAlign.Component(rootFather, document.body);
+            this._root.ProcessCssPropertiesChanged = function () { };
             document.body["component"] = this._root;
-            // popula os tamanhos iniciais
-            this.RefreshRootSize();
+            this._root.H.Size.Min = hSize;
+            this._root.V.Size.Min = vSize;
             this.ExecuteRefreshLayout();
         }
         ExecuteRefreshLayout() {
+            this._processoChanges();
             this._root.Measure(HtmlAlign.SizeDelimiter.Default(), HtmlAlign.SizeDelimiter.Default());
             this._root.H.GivedSpace = new HtmlAlign.Space(0, this._root.H.ComponentRequired);
             this._root.V.GivedSpace = new HtmlAlign.Space(0, this._root.V.ComponentRequired);
             this._root.Arrange();
+            this._root.ProcessLayout();
         }
         RefreshValuesFromCssProperties(component) {
             var css = window.getComputedStyle(component.Element);
@@ -2737,10 +2536,10 @@ var HtmlAlign;
             HtmlAlign.Log.ReadedCssProperties++;
         }
         RefreshRootSize() {
-            var rootWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            var rootHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            this._root.Width = { min: rootWidth, max: Number.POSITIVE_INFINITY };
-            this._root.Height = { min: rootHeight, max: Number.POSITIVE_INFINITY };
+            this._root.H.Size.Min = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            this._root.V.Size.Min = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            this._root.NotifyNeedMeasure();
+            HtmlAlign.RefreshLayout();
         }
         RegisterBehavior(behavior) {
             this._behaviors.push(behavior);
@@ -2777,8 +2576,6 @@ var HtmlAlign;
                 }
             }
             return null;
-            // Se nenhum foi encontrado manda o default (primeiro a ser adicionado)
-            //return this._behaviors[0].GetNew();
         }
         GetBehaviorName(component) {
             if (component.Behavior != undefined) {
@@ -2805,23 +2602,19 @@ var HtmlAlign;
                     cssText += computed.getPropertyValue(entry.CssProperty.Name);
                 }
             }
-            // a fonte afetará o tamanho do conteúdo, por isso ela precisa ser salva
-            if (component.IsContent) {
-                cssText += computed.getPropertyValue("font");
-            }
             if (component.FatherAttached["lastCssText"] == undefined || refreshValuesFirst) {
                 component.FatherAttached["lastCssText"] = cssText;
             }
             else if (component.FatherAttached["lastCssText"] != cssText) {
                 component.FatherAttached["lastCssText"] = cssText;
-                component.NotifyTagChanged();
+                component.NotifyCssPropertiesChanged();
             }
             for (var index = 0; index < component.Children.length; index++) {
                 this._verifyStyleSheetChangedComponent(component.Children[index], refreshValuesFirst);
             }
         }
         ForceRereadAllCssProperties(component) {
-            component.NotifyTagChanged();
+            component.NotifyCssPropertiesChanged();
             for (var index = 0; index < component.Children.length; index++) {
                 this.ForceRereadAllCssProperties(component.Children[index]);
             }
@@ -2834,11 +2627,11 @@ var HtmlAlign;
     function RefreshLayout() {
         if (!_waitingToRefresh && !_hasRefreshGuarantee) {
             _waitingToRefresh = true;
-            setTimeout(_refreshProtection, 12);
+            _refreshProtection();
         }
         else if (_inRefreshingProcess && !_hasRefreshGuarantee) {
             _hasRefreshGuarantee = true;
-            setTimeout(_refreshGuarantee, 4);
+            requestAnimationFrame(_refreshGuarantee);
         }
     }
     HtmlAlign.RefreshLayout = RefreshLayout;
@@ -2851,7 +2644,7 @@ var HtmlAlign;
     function _refreshProtection() {
         if (!_inRefreshingProcess) {
             _inRefreshingProcess = true;
-            setTimeout(_refresh, 4);
+            _refresh();
         }
     }
     function _refresh() {
@@ -2926,8 +2719,9 @@ var HtmlAlign;
     }
     ;
     var observer = new MutationObserver((mutations, observer) => {
-        for (var indexComponent = 0; indexComponent < mutations.length; indexComponent++) {
-            var mutationRecord = mutations[indexComponent];
+        var qtdList = mutations.length;
+        for (var indexRecord = 0; indexRecord < qtdList; indexRecord++) {
+            var mutationRecord = mutations[indexRecord];
             // se foi uma atualização de texto ou de uma tag que não implementa nenhum comportamento
             // é feita uma pesquisa subindo na árvore DOM por qual é o primeiro componente pai em que
             // essa atualização está contida, se esse componente é um conteúdo é disparada uma rotina
@@ -2938,7 +2732,7 @@ var HtmlAlign;
                     if (element["component"] != null) {
                         var component = element["component"];
                         if (component.Behavior.Name == "in") {
-                            component.NotifyTagChanged();
+                            HtmlAlign.Layout._notifyCssPropertyChangedList.push(component);
                             break;
                         }
                         else {
@@ -2957,16 +2751,20 @@ var HtmlAlign;
                     if (mutationRecord.attributeName == "style" && element["laststyle"] == element.getAttribute("style")) {
                         continue;
                     }
-                    component.NotifyTagChanged();
+                    HtmlAlign.Layout._notifyCssPropertyChangedList.push(component);
                 }
                 for (var index = 0; index < mutationRecord.removedNodes.length; index++) {
-                    component.NotifyRemoved(mutationRecord.removedNodes[index]);
+                    HtmlAlign.Layout._notifyChildrenChangedList.push(component);
                 }
                 // possível melhora, os elementos aparecem duplicados na lista
                 for (var index = 0; index < mutationRecord.addedNodes.length; index++) {
-                    component.NotifyAdded(mutationRecord.addedNodes[index]);
+                    HtmlAlign.Layout._notifyChildrenChangedList.push(component);
                 }
             }
+        }
+        if (HtmlAlign.Layout._notifyChildrenChangedList.length > 0
+            || HtmlAlign.Layout._notifyCssPropertyChangedList.length > 0) {
+            requestAnimationFrame(HtmlAlign.RefreshLayout);
         }
     });
     function _init() {
@@ -2975,8 +2773,8 @@ var HtmlAlign;
         // inicia o observador de mudanças nos elementos
         observer.observe(document.body, { attributes: true, childList: true, subtree: true, characterData: true });
         // inicializa o verificador de update
-        _verifyStyleSheetWorker();
-        window.addEventListener('resize', Debouncer(function () { HtmlAlign.Layout.RefreshRootSize(); }, HtmlAlign.Config.ResizeDelay));
+        requestAnimationFrame(() => setTimeout(_verifyStyleSheetWorker, 2000));
+        window.addEventListener('resize', function () { HtmlAlign.Layout.RefreshRootSize(); });
     }
     ;
     if (document.readyState === "complete") {
@@ -2987,7 +2785,6 @@ var HtmlAlign;
     }
     // configurações
     HtmlAlign.Config = {
-        ResizeDelay: 4,
         DevToolsTreshhold: 160,
         IfDevToolsOpenRefresh: true,
         DevToolsOpenRefreshDelay: 400,

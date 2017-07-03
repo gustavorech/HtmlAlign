@@ -3,11 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <title>Flow 1000 divs</title>
-    <script src="../js/HtmlAlign.js"></script>
+    <!--<script src="../js/HtmlAlign.js"></script>-->
 
     <style>
         wrap {
-            --align: left top;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 95%;
+            margin: auto;
+            --align: center;
             --size: 95% ~;
             padding: 5px;
             background-color: #52ae8f;
@@ -19,8 +24,9 @@
             }
 
                 wrap > panel > in {
-                    padding: 10px 15px;
+                    margin: 10px 15px;
                     font-size: 30px;
+                    display: block;
                 }
     </style>
 </head>
@@ -30,7 +36,7 @@
         function criarElementos() {
             var flow = document.getElementById("flow");
             var styleclass = "inner1";
-            for (var i = 0; i < 1000; i++) {
+            for (var i = 0; i < 10000; i++) {
 
                 var panel = document.createElement("panel");
                 var inter = document.createElement("in");

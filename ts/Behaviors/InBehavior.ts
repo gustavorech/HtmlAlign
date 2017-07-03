@@ -33,14 +33,14 @@ namespace HtmlAlign {
                 // se modificar as propriedades abaixo na primeria medida o tempo é muito alto
                 if (!this._widthIsMaxContent) {
                     this._widthIsMaxContent = true;
-                    this.Component.Element.style.width = Layout.MaxContentString;
+                    this.Component.Element.style.removeProperty("width");
 
                     this._needInformLastStyle = true;
                 }
 
                 if (!this._heightIsMaxContent) {
                     this._heightIsMaxContent = true;
-                    this.Component.Element.style.height = Layout.MaxContentString;
+                    this.Component.Element.style.removeProperty("height");
 
                     this._needInformLastStyle = true;
                 }
@@ -49,12 +49,12 @@ namespace HtmlAlign {
 
                 // maior ou igual porque o clientWidth só informa a parte inteira do número
                 if (this.Component.Element.clientWidth >= maxHorizontal) {
-                    this.Component.Element.style.width = maxHorizontal + "px";
+                    this.Component.Element.style.setProperty("width", maxHorizontal + "px");
                     this._widthIsMaxContent = false;
 
                     if (!this._heightIsMaxContent) {
                         this._heightIsMaxContent = true;
-                        this.Component.Element.style.height = Layout.MaxContentString;
+                        this.Component.Element.style.removeProperty("height");
                     }
 
                     this._needInformLastStyle = true;
@@ -69,12 +69,16 @@ namespace HtmlAlign {
 
                 var rect = this.Component.Element.getBoundingClientRect();
 
-                this.Component.H.ContentDesired = rect.width - this.Component.H.Border.Sum() - this.Component.H.Padding.Sum();
-                this.Component.V.ContentDesired = rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
+                this.Component.H.ActualSize = this.Component.H.ContentDesired =
+                    rect.width - this.Component.H.Border.Sum() - this.Component.H.Padding.Sum();
+
+                this.Component.V.ActualSize = this.Component.V.ContentDesired =
+                    rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
             }
         }
 
         public Arrange(): void {
+            var needRefreshLayout = false;
             if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
 
                 this.Component.H.GivedDelimiter = new SizeDelimiter(this.Component.H.GivedSpace.Size, this.Component.H.GivedSpace.Size);
@@ -82,60 +86,25 @@ namespace HtmlAlign {
 
                 this.Measure();
 
-                if (this.Component.H.ComponentSpace.Size > this.Component.H.GivedSpace.Size
-                    || this.Component.H.ComponentDesired < this.Component.H.ComponentSpace.Size
-                    || !this._widthIsMaxContent) {
+                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
                     this._widthIsMaxContent = false;
-                    var width = this.Component.H.ComponentSpace.Size;
-
-                    if (width < 0) {
-                        width = 0;
-                    }
-
-                    this.Component.Element.style.width = width + "px";
+                }
+                else {
+                    this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
                 }
             }
 
-            if (this.Component.V.ComponentSpace.Size > this.Component.V.GivedSpace.Size
-                || this.Component.V.ComponentDesired < this.Component.V.ComponentSpace.Size
-                || !this._heightIsMaxContent) {
+            if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
                 this._heightIsMaxContent = false;
-                var height = this.Component.V.ComponentSpace.Size;
-
-                if (height < 0) {
-                    height = 0;
-                }
-
-                this.Component.Element.style.height = height + "px";
+            }
+            else {
+                this.Component.V.ActualSize = this.Component.V.ComponentSpace.Size;
             }
 
-            //if (!this._widthIsMaxContent || this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
-            //    this._widthIsMaxContent = false;
-            //    var width = this.Component.H.ComponentSpace.Size;
+            if (this.Component.H.NeedLayout || this.Component.V.NeedLayout) {
+                this.Component.NotifyNeedLayout();
+            }
 
-            //    if (width < 0) {
-            //        width = 0;
-            //    }
-
-            //    this.Component.Element.style.width = width + "px";
-            //}
-
-            //if (!this._heightIsMaxContent || this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
-            //    this._heightIsMaxContent = false;
-            //    var height = this.Component.V.ComponentSpace.Size;
-
-            //    if (height < 0) {
-            //        height = 0;
-            //    }
-
-            //    this.Component.Element.style.height = height + "px";
-            //}
-            
-            this.Component.Element.style.left = this.Component.H.ComponentSpace.Displacement + "px";
-            this.Component.Element.style.top = this.Component.V.ComponentSpace.Displacement + "px";
-
-            // armazena o último valor do atributo style para o MutationObserver não disparar uma atualização
-            this.Component.Element["laststyle"] = this.Component.Element.getAttribute("style");
         }
     }
 }
