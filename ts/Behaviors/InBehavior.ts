@@ -74,10 +74,9 @@ namespace HtmlAlign {
 
                 this.Component.V.ContentDesired =
                     rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
-
-                console.log(rect.width);
-                this.Component.H.ActualSize = rect.width;
-                this.Component.V.ActualSize = rect.height;
+                
+                //this.Component.H.ActualSize = rect.width;
+                //this.Component.V.ActualSize = rect.height;
             }
         }
 

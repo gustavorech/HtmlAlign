@@ -515,7 +515,6 @@ var HtmlAlign;
         // passo 4: popular valores de layout
         RefreshLayout(component, axis) {
             if (axis == HtmlAlign.Axis.Horizontal) {
-                console.log(this._actualSize);
                 if (this._actualSize != this._componentSpace.Size) {
                     this._actualSize = this._componentSpace.Size;
                     this._actualSize = this._actualSize > 0 ? this._actualSize : 0;
@@ -1437,9 +1436,8 @@ var HtmlAlign;
                     rect.width - this.Component.H.Border.Sum() - this.Component.H.Padding.Sum();
                 this.Component.V.ContentDesired =
                     rect.height - this.Component.V.Border.Sum() - this.Component.V.Padding.Sum();
-                console.log(rect.width);
-                this.Component.H.ActualSize = rect.width;
-                this.Component.V.ActualSize = rect.height;
+                //this.Component.H.ActualSize = rect.width;
+                //this.Component.V.ActualSize = rect.height;
             }
         }
         Arrange() {
