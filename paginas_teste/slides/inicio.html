@@ -1,0 +1,683 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Exemplos</title>
+    <script src="../../js/HtmlAlign.js"></script>
+    <script type="text/javascript">
+        //HtmlAlign.Config.VerifyStyleSheetPeriodicaly = true;
+        //HtmlAlign.Config.VerifyStyleSheetPeriodicalyDelay = 400;
+    </script>
+
+    <style>
+        body { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        body { font-size: 24px; background-color: grey; font-family: "Segoe UI"; }
+
+        .grey { background-color: lightgrey; }
+        .blue { background-color: rgb(33, 33, 146); }
+        .red { background-color: rgba(185, 68, 72, 1); }
+
+        #fitContainer { --align: center; }
+        #slider { --align: center; }
+        .slide { visibility: hidden; --size: 640 480; margin: 10px 5px; background-color: white; box-shadow: 3px 3px 9px 5px rgb(109, 109, 109); }
+
+        .big-title { --align: center; text-align: center; font-size: 36px; color: rgba(185, 68, 72, 1); margin: 0 40px; }
+
+
+        .title { --dock: top; --size: 100% ~; --align: center; font-size: 48px; }
+        .title { background-color: rgb(33, 33, 146); border: 2px solid rgba(255, 255, 255, .2); border-width: 2px 0; color: white; padding-bottom: 2px; }
+            .title > in { --align: center; }
+        .content { --dock: fit; background-color: rgba(33, 33, 146, .03); border-bottom: 2px solid rgba(33, 33, 146, .3); }
+
+        .title-ad { --dock: top; --align: left; font-size: 36px; margin: 10px; color: rgb(122, 26, 29); }
+
+        .vbg { font-size: 64px; }
+        .big { font-size: 48px; }
+        .med { font-size: 36px; }
+        .sml { font-size: 24px; }
+        .smr { font-size: 18px; }
+
+        .eqt-top-list { --stack: top; --size: 100%; }
+            .eqt-top-list > panel { --size: ~ *; margin: 10px; }
+                .eqt-top-list > panel > in { --align: center; }
+
+        .ctr-left-list { --stack: top; --align: center left; --size: ~100% ~; }
+            .ctr-left-list > in { margin: 10px; --size: ~100% ~; margin-left: 20px; border-left: 7px solid rgba(185, 68, 72, .5); padding-left: 10px; }
+    </style>
+</head>
+<body oncontextmenu="clicado('right'); return false;" onclick="clicado('left'); return false;" onkeyup="clicado(event);">
+    <fit id="fitContainer">
+        <panel id="slider">
+
+            <panel id="slide0_0" class="slide">
+                <in class="big-title" style="color: rgb(33, 33, 146);">Alternativa de layout dinâmico para HTML com base no sistema de layout dinâmico do WPF</in>
+                <in class="sml" style="--align: bottom center; margin-bottom: 10px;">Gustavo Rech</in>
+            </panel>
+
+            <panel id="slide0_3" class="slide">
+                <in class="big-title vbg">HTML e CSS</in>
+            </panel>
+
+            <panel id="slide0_6" class="slide">
+                <in class="big-title vbg">WPF</in>
+            </panel>
+
+            <dock id="slide3_0" class="slide">
+                <panel class="title"><in>Objetivo</in></panel>
+                <panel class="content">
+                    <stack class="ctr-left-list med">
+                        <in>Adicionar ao HTML um sistema de layout dinâmico semelhante ao do WPF</in>
+                        <in>Simplicidade</in>
+                        <in>Expressividade</in>
+                        <in>Extensibilidade</in>
+                    </stack>
+                </panel>
+            </dock>
+
+            <dock id="slide3_5" class="slide">
+                <style type="text/css">
+                    #imgWebKit { background: url(webkit.png) no-repeat center center; background-size: 550px; }
+                </style>
+                <panel class="title"><in>Objetivo</in></panel>
+                <panel id="imgWebKit" class="content">
+
+                </panel>
+            </dock>
+
+            <dock id="slide3_10" class="slide">
+                <style type="text/css">
+                    #imgWebKit2 { background: url(webkit2.png) no-repeat center center; background-size: 550px; }
+                </style>
+                <panel class="title"><in>Objetivo</in></panel>
+                <panel id="imgWebKit2" class="content">
+
+                </panel>
+            </dock>
+
+            <dock id="slide6_0" class="slide">
+                <panel class="title"><in>Motivação</in></panel>
+                <panel class="content">
+                    <stack class="ctr-left-list med">
+                        <in>Evolução do HTML</in>
+                        <in>Diferença entre HTML e WPF</in>
+                        <in>Construção de sistemas WEB</in>
+                        <in>Experiência pessoal</in>
+                        <in>Observação: demora; frustração</in>
+                    </stack>
+                </panel>
+            </dock>
+
+            <dock id="slide8_0" class="slide">
+                <panel class="title"><in>Objetivo</in></panel>
+                <panel class="content">
+                    <stack class="ctr-left-list med">
+                        <in>Adicionar ao HTML um sistema de layout dinâmico semelhante ao do WPF</in>
+                        <in>Simplicidade</in>
+                        <in>Expressividade</in>
+                        <in>Extensibilidade</in>
+                    </stack>
+                </panel>
+            </dock>
+
+            <dock id="slide9_0" class="slide">
+                <panel class="title"><in>Layout</in></panel>
+                <panel class="content">
+                    <stack class="ctr-left-list med">
+                        <in>Elaboração</in>
+                        <in>Descrição</in>
+                        <in>Interpretação</in>
+                        <in>Renderização</in>
+                        <in>Apresenta</in>
+                    </stack>
+                </panel>
+            </dock>
+
+            <dock id="slide11_0" class="slide">
+                <panel class="title"><in>Conceitos</in></panel>
+                <panel class="content">
+                    <stack class="ctr-left-list med">
+                        <in>Modelo de Caixa</in>
+                        <in>Auto Dimensionamento</in>
+                        <in>Alinhamento</in>
+                        <in>Composição</in>
+                        <in>Comportamento</in>
+                    </stack>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 13 -------------------------------->
+            <panel id="slide13_0" class="slide">
+                <in class="big-title vbg">Modelo de Caixa</in>
+            </panel>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <panel id="slide15_0" class="slide">
+                <in class="big-title vbg">Auto Dimensionamento</in>
+            </panel>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_3" class="slide">
+                <script type="text/javascript">
+                    function anim15_3() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl0").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_3 = new anim15_3();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 200 &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="grey" id="pnl0" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: 200 50%;"></panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_5" class="slide">
+                <script type="text/javascript">
+                    function anim15_5() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl1").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_5 = new anim15_5();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 50% &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="grey" id="pnl1" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: 50% 50%;"></panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_7" class="slide">
+                <script type="text/javascript">
+                    function anim15_7() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl2").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_7 = new anim15_7();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 90%[200~] &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="grey" id="pnl2" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: 90%[200~] 50%;"></panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_9" class="slide">
+                <script type="text/javascript">
+                    function anim15_9() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl3").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_9 = new anim15_9();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 90%[~350] &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="grey" id="pnl3" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: 90%[~350] 50%;"></panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_11" class="slide">
+                <script type="text/javascript">
+                    function anim15_11() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl4").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_11 = new anim15_11();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 90%[200~350] &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="grey" id="pnl4" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: 90%[200~350] 50%;"></panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_13" class="slide">
+                <script type="text/javascript">
+                    function anim15_13() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl5").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_13 = new anim15_13();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: * &nbsp;50%;</in>
+                <panel class="content">
+                    <stack class="grey" id="pnl5" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                    </stack>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_15" class="slide">
+                <script type="text/javascript">
+                    function anim15_15() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl6").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_15 = new anim15_15();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: * &nbsp;50%;&nbsp;&nbsp; --size: 100 &nbsp;50%;</in>
+                <panel class="content">
+                    <stack class="grey" id="pnl6" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: 100 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                    </stack>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_17" class="slide">
+                <script type="text/javascript">
+                    function anim15_17() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl7").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_17 = new anim15_17();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: * &nbsp;50%;&nbsp;&nbsp; --size: 50% &nbsp;50%;</in>
+                <panel class="content">
+                    <stack class="grey" id="pnl7" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: 50% 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                    </stack>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_19" class="slide">
+                <script type="text/javascript">
+                    function anim15_19() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl8").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_19 = new anim15_19();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: * &nbsp;50%;&nbsp;&nbsp; --size: 5* &nbsp;50%;</in>
+                <panel class="content">
+                    <stack class="grey" id="pnl8" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: 5* 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                    </stack>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_21" class="slide">
+                <script type="text/javascript">
+                    function anim15_21() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 10 }).to({ x: 95 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl9").style.setProperty("--size", this.x + "% 90%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_21 = new anim15_21();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: * &nbsp;50%;&nbsp; --size: 90%[~200] &nbsp;50%;</in>
+                <panel class="content">
+                    <stack class="grey" id="pnl9" style="--align: center; overflow: hidden;">
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: 90%[~200] 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                        <panel class="blue" style="--align: center; --size: * 50%; margin: 5px;"></panel>
+                    </stack>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_23" class="slide">
+                <script type="text/javascript">
+                    function anim15_23() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 50 }).to({ x: 500 }, 2500).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl10").style.setProperty("--size", this.x + " 35%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_23 = new anim15_23();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 200~350 &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="blue" style="--align: center; overflow: hidden; --size: 200~350 50%">
+                        <panel class="red" id="pnl10" style="--align: center; ">
+                        </panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_25" class="slide">
+                <script type="text/javascript">
+                    function anim15_25() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 50 }).to({ x: 450 }, 2000).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl11").style.setProperty("--size", this.x + " 35%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_25 = new anim15_25();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 30%~350 &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="blue" style="--align: center; overflow: hidden; --size: 30%~350 50%">
+                        <panel class="red" id="pnl11" style="--align: center; ">
+                        </panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_27" class="slide">
+                <script type="text/javascript">
+                    function anim15_27() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 50 }).to({ x: 450 }, 2000).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl12").style.setProperty("--size", this.x + " 35%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_27 = new anim15_27();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 200~90% &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="blue" style="--align: center; overflow: hidden; --size: 200~90% 50%">
+                        <panel class="red" id="pnl12" style="--align: center; ">
+                        </panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_29" class="slide">
+                <script type="text/javascript">
+                    function anim15_29() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 50 }).to({ x: 450 }, 2000).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl13").style.setProperty("--size", this.x + " 35%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_29 = new anim15_29();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: 20%~50% &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="blue" style="--align: center; overflow: hidden; --size: 20%~50% 50%">
+                        <panel class="red" id="pnl13" style="--align: center; ">
+                        </panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_31" class="slide">
+                <script type="text/javascript">
+                    function anim15_31() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 50 }).to({ x: 450 }, 2000).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl14").style.setProperty("--size", this.x + " 35%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_31 = new anim15_31();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad">--size: ~ &nbsp;50%;</in>
+                <panel class="content">
+                    <panel class="blue" style="--align: center; overflow: hidden; --size: ~ 50%">
+                        <panel class="red" id="pnl14" style="--align: center; ">
+                        </panel>
+                    </panel>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 15 -------------------------------->
+            <dock id="slide15_33" class="slide">
+                <style>
+                    .stch1 { --size: ~; --align: streach; margin: 5px; background-color: rgba(185, 68, 72, 1); }
+                    .stch2 { --size: ~; --align: streach; margin: 5px; background-color: rgb(33, 33, 146); }
+                </style>
+                <script type="text/javascript">
+                    function anim15_33() {
+                        this.iniciar = function () {
+                            this.tween = new TWEEN.Tween({ x: 20 }).to({ x: 80 }, 2000).repeat(Infinity).yoyo(true)
+                                .onUpdate(function () {
+                                    document.getElementById("pnl15").style.setProperty("--size", this.x + "%");
+                                }).start();
+                        };
+                        this.terminar = function () { try { this.tween.stop(); } catch (ex) { } }
+                    };
+                    var animacao15_33 = new anim15_33();
+                </script>
+                <panel class="title"><in>Auto Dimensionamento</in></panel>
+                <in class="title-ad sm">--size: ~; --align: streach; margin: 5px;</in>
+                <panel class="content">
+                    <panel class="grey" id="pnl15" style="--align: center; overflow: hidden;">
+                        <panel class="stch1">
+                            <panel class="stch2">
+                                <panel class="stch1">
+                                    <panel class="stch2">
+                                        <panel class="stch1">
+                                            <panel class="stch2">
+                                                <panel class="stch1">
+                                                    <panel class="stch2">
+                                                        <panel class="stch1">
+                                                            <panel class="stch2">
+                                                            </panel>
+                                                        </panel>
+                                                    </panel>
+                                                </panel>
+                                            </panel>
+                                        </panel>
+                                    </panel>
+                                </panel>
+                            </panel>
+                        </panel>
+                    </panel>
+                </panel>
+            </dock>
+            
+
+
+            <!--------------------------------- 18 -------------------------------->
+            <panel id="slide18_0" class="slide">
+                    <in class="big-title vbg">Alinhamento</in>
+            </panel>
+
+
+
+            <!--------------------------------- 18 -------------------------------->
+            <dock id="slide18_3" class="slide">
+                <style type="text/css">
+                    .grid-alinhamentos { --grid: * * * * *, * * * * *; --align: center; --size: 600 350; }
+
+                        .grid-alinhamentos > panel { --size: 100%; margin: 2px; background-color: lightgray }
+
+                        .grid-alinhamentos in { --align: center; font-size: 24px; text-align: center; color: rgb(122, 26, 29); }
+
+                        .grid-alinhamentos > panel > panel { --size: 33%; background-color: rgb(33, 33, 146); border: 2px solid rgba(185, 68, 72, 1); }
+
+                        .grid-alinhamentos .hs { --size: ~ 33%; }
+
+                        .grid-alinhamentos .vs { --size: 33% ~; }
+                </style>
+                <panel class="title"><in>Alinhamento</in></panel>
+                <panel class="content">
+                    <grid class="grid-alinhamentos">
+                        <panel style="--place: 1 0;"><in>left</in></panel>
+                        <panel style="--place: 2 0;"><in>center</in></panel>
+                        <panel style="--place: 3 0;"><in>right</in></panel>
+                        <panel style="--place: 4 0;"><in>streach</in></panel>
+
+                        <panel style="--place: 0 1;"><in>top</in></panel>
+                        <panel style="--place: 0 2;"><in>center</in></panel>
+                        <panel style="--place: 0 3;"><in>bottom</in></panel>
+                        <panel style="--place: 0 4;"><in>streach</in></panel>
+
+                        <panel style="--place: 1 1;"><panel style="--align: left top"></panel></panel>
+                        <panel style="--place: 1 2;"><panel style="--align: left center"></panel></panel>
+                        <panel style="--place: 1 3;"><panel style="--align: left bottom"></panel></panel>
+                        <panel style="--place: 1 4;"><panel style="--align: left streach" class="vs"></panel></panel>
+
+                        <panel style="--place: 2 1;"><panel style="--align: center top"></panel></panel>
+                        <panel style="--place: 2 2;"><panel style="--align: center center"></panel></panel>
+                        <panel style="--place: 2 3;"><panel style="--align: center bottom"></panel></panel>
+                        <panel style="--place: 2 4;"><panel style="--align: center streach" class="vs"></panel></panel>
+
+                        <panel style="--place: 3 1;"><panel style="--align: right top"></panel></panel>
+                        <panel style="--place: 3 2;"><panel style="--align: right center"></panel></panel>
+                        <panel style="--place: 3 3;"><panel style="--align: right bottom"></panel></panel>
+                        <panel style="--place: 3 4;"><panel style="--align: right streach" class="vs"></panel></panel>
+
+                        <panel style="--place: 4 1;"><panel style="--align: streach top" class="hs"></panel></panel>
+                        <panel style="--place: 4 2;"><panel style="--align: streach center" class="hs"></panel></panel>
+                        <panel style="--place: 4 3;"><panel style="--align: streach bottom" class="hs"></panel></panel>
+                        <panel style="--place: 4 4;"><panel style="--align: streach streach; --size: ~"></panel></panel>
+                    </grid>
+                </panel>
+            </dock>
+
+
+
+            <!--------------------------------- 21 -------------------------------->
+            <panel id="slide21_0" class="slide">
+                <in class="big-title vbg">Composição</in>
+            </panel>
+
+
+
+            <!--------------------------------- 23 -------------------------------->
+            <panel id="slide23_0" class="slide">
+                <in class="big-title vbg">Comportamento</in>
+            </panel>
+
+        </panel>
+    </fit>
+    <script src="tween.js"></script>
+    <script src="animacao.js"></script>
+    <script src="slider.js"></script>
+</body>
+</html>

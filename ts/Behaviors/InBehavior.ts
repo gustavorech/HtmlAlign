@@ -87,13 +87,13 @@ namespace HtmlAlign {
                 this.Component.V.GivedDelimiter = new SizeDelimiter(this.Component.V.GivedSpace.Size, this.Component.V.GivedSpace.Size);
 
                 this.Measure();
-            }
 
-            if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
-                this._widthIsMaxContent = false;
-            }
-            else {
-                this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
+                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+                    this._widthIsMaxContent = false;
+                }
+                else {
+                    this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
+                }
             }
 
             if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {

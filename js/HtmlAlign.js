@@ -1445,12 +1445,12 @@ var HtmlAlign;
                 this.Component.H.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.H.GivedSpace.Size, this.Component.H.GivedSpace.Size);
                 this.Component.V.GivedDelimiter = new HtmlAlign.SizeDelimiter(this.Component.V.GivedSpace.Size, this.Component.V.GivedSpace.Size);
                 this.Measure();
-            }
-            if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
-                this._widthIsMaxContent = false;
-            }
-            else {
-                this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
+                if (this.Component.H.ComponentDesired != this.Component.H.GivedSpace.Size) {
+                    this._widthIsMaxContent = false;
+                }
+                else {
+                    this.Component.H.ActualSize = this.Component.H.ComponentSpace.Size;
+                }
             }
             if (this.Component.V.ComponentDesired != this.Component.V.GivedSpace.Size) {
                 this._heightIsMaxContent = false;
@@ -2419,7 +2419,7 @@ var HtmlAlign;
                 this._notifyChildrenChangedList[i].NotifyChildrenChanged();
             }
             for (var i = 0; i < _qtdCssPropertiesChanged; i++) {
-                this._notifyCssPropertyChangedList[i].NotifyChildrenChanged();
+                this._notifyCssPropertyChangedList[i].NotifyCssPropertiesChanged();
             }
             this._notifyChildrenChangedList.splice(0, _qtdChildrenChanged);
             this._notifyCssPropertyChangedList.splice(0, _qtdCssPropertiesChanged);

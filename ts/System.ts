@@ -56,7 +56,7 @@ namespace HtmlAlign {
             }
 
             for (var i = 0; i < _qtdCssPropertiesChanged; i++) {
-                this._notifyCssPropertyChangedList[i].NotifyChildrenChanged();
+                this._notifyCssPropertyChangedList[i].NotifyCssPropertiesChanged();
             }
 
             this._notifyChildrenChangedList.splice(0, _qtdChildrenChanged);
