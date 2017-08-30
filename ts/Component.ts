@@ -9,6 +9,7 @@ namespace HtmlAlign {
         public _isRoot: boolean;
         public _isBehavior: boolean;
         public _isContent: boolean;
+        public _oi123: number;
 
         constructor(public readonly Father: Component, public readonly Element: HTMLElement) {
 
